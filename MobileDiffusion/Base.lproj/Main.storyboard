@@ -27,6 +27,9 @@
                                 <rect key="frame" x="324.33333333333331" y="203" width="58.666666666666686" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="生成"/>
+                                <connections>
+                                    <action selector="tapGenerate" destination="BYZ-38-t0r" eventType="touchUpInside" id="u6Y-Vj-f4u"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kpJ-aX-lil">
                                 <rect key="frame" x="10" y="159" width="373" height="34"/>
@@ -39,13 +42,31 @@
                                     <constraint firstAttribute="width" secondItem="5QP-Ci-fKJ" secondAttribute="height" multiplier="1:1" id="har-WO-H21"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJe-7V-Py1">
+                                <rect key="frame" x="10" y="636" width="41.333333333333336" height="20.333333333333371"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvJ-lT-fNB">
+                                <rect key="frame" x="10" y="203" width="225.66666666666666" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="回到Home页面前要先点我"/>
+                                <connections>
+                                    <action selector="cancelImageTask" destination="BYZ-38-t0r" eventType="touchUpInside" id="rZ2-uG-rHv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="pJe-7V-Py1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="2GN-2D-H6i"/>
+                            <constraint firstItem="mvJ-lT-fNB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="4oZ-cK-sk6"/>
+                            <constraint firstItem="mvJ-lT-fNB" firstAttribute="top" secondItem="kpJ-aX-lil" secondAttribute="bottom" constant="10" id="5dl-wr-Nen"/>
                             <constraint firstItem="5QP-Ci-fKJ" firstAttribute="top" secondItem="kpJ-aX-lil" secondAttribute="bottom" constant="60" id="6Qq-6h-Bkh"/>
                             <constraint firstItem="J3c-6N-Ugw" firstAttribute="top" secondItem="kpJ-aX-lil" secondAttribute="bottom" constant="10" id="7f5-VQ-xIp"/>
                             <constraint firstItem="22Y-et-2Rb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9Mj-Pd-MNj"/>
+                            <constraint firstItem="pJe-7V-Py1" firstAttribute="top" secondItem="5QP-Ci-fKJ" secondAttribute="bottom" constant="10" id="BCu-v5-PgX"/>
                             <constraint firstItem="5QP-Ci-fKJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="Cd4-Zc-8JI"/>
                             <constraint firstItem="kpJ-aX-lil" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="D6q-Ik-6s0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="J3c-6N-Ugw" secondAttribute="trailing" constant="10" id="Fo9-AR-hjf"/>
@@ -57,6 +78,9 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="vImage" destination="5QP-Ci-fKJ" id="AVa-Ib-a3h"/>
+                        <outlet property="vMemory" destination="pJe-7V-Py1" id="TZo-DX-6gC"/>
+                        <outlet property="vPrompt" destination="kpJ-aX-lil" id="0AO-Ov-l8t"/>
                         <outlet property="vStatus" destination="22Y-et-2Rb" id="BE5-ch-23K"/>
                     </connections>
                 </viewController>

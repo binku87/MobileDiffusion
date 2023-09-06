@@ -18,6 +18,9 @@ extension AttentionVariant {
     var defaultComputeUnits: MLComputeUnits { self == .original ? .cpuAndGPU : .cpuAndNeuralEngine }
 }
 
+let runningOnMac = false
+let deviceHas6GBOrMore = ProcessInfo.processInfo.physicalMemory > 5924000000   // Different devices report different amounts, so approximate
+
 struct ModelInfo {
     /// Hugging Face model Id that contains .zip archives with compiled Core ML models
     let modelId: String
@@ -187,27 +190,12 @@ extension ModelInfo {
     )
     
     static let MODELS: [ModelInfo] = {
-        if deviceSupportsQuantization {
-            return [
-                ModelInfo.v14Base,
-                ModelInfo.v14Palettized,
-                ModelInfo.v15Base,
-                ModelInfo.v15Palettized,
-                ModelInfo.v2Base,
-                ModelInfo.v2Palettized,
-                ModelInfo.v21Base,
-                ModelInfo.v21Palettized,
-                ModelInfo.xl,
-                ModelInfo.xlmbp
-            ]
-        } else {
-            return [
-                ModelInfo.v14Base,
-                ModelInfo.v15Base,
-                ModelInfo.v2Base,
-                ModelInfo.v21Base,
-            ]
-        }
+        return [
+            ModelInfo.v14Base,
+            ModelInfo.v15Base,
+            ModelInfo.v2Base,
+            ModelInfo.v21Base,
+        ]
     }()
     
     static func from(modelVersion: String) -> ModelInfo? {

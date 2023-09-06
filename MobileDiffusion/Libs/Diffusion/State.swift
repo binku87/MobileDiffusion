@@ -41,7 +41,8 @@ public enum StableDiffusionScheduler: String {
 
 class GenerationContext: ObservableObject {
     let scheduler = StableDiffusionScheduler.dpmSolverMultistepScheduler
-
+    weak var delegate: GenerationContextDelegate?
+    
     @Published var pipeline: Pipeline? = nil {
         didSet {
             if let pipeline = pipeline {
@@ -82,6 +83,8 @@ class GenerationContext: ObservableObject {
         if previews > 0, let newImage = progress.currentImages.first, newImage != nil {
             previewImage = newImage
         }
+        
+        delegate?.generationDidUdpateProgress()
     }
 
     func generate() async throws -> GenerationResult {
@@ -101,6 +104,10 @@ class GenerationContext: ObservableObject {
     func cancelGeneration() {
         pipeline?.setCancelled()
     }
+}
+
+public protocol GenerationContextDelegate: NSObject {
+    func generationDidUdpateProgress()
 }
 
 class Settings {

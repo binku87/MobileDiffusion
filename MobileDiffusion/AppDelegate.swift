@@ -29,6 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        print("warninghttps://res.eco.mi.com/utrend/web/")
+        NotificationCenter.default.post(name: .MemoryDidWarning, object: nil)
+    }
 
 }
 

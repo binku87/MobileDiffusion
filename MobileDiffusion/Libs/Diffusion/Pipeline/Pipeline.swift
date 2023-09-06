@@ -97,6 +97,12 @@ class Pipeline {
         let previewIndices = previewIndices(stepCount, previewCount)
 
         let images = try pipeline.generateImages(configuration: config) { progress in
+            if canceled {
+                pipeline.unloadResources()
+                sampleTimer.stop()
+                canceled = false
+                return false
+            }
             sampleTimer.stop()
             handleProgress(StableDiffusionProgress(progress: progress,
                                                    previewIndices: previewIndices),
@@ -120,5 +126,6 @@ class Pipeline {
         
     func setCancelled() {
         canceled = true
+        pipeline.unloadResources()
     }
 }
