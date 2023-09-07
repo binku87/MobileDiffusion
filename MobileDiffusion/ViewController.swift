@@ -131,7 +131,8 @@ class ViewController: UIViewController {
         let (_, free) = getSystemMemoryInfo()
         //if free < 60 {
         self.vStatus.text = "Cancelled"
-        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadResources()
+//        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadResources()
+        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadUnetResources()
         //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
         //print("------")
         //self.loadModel()

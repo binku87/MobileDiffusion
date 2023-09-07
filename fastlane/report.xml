@@ -5,22 +5,54 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000472">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000565">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Switch to ios api_key lane" time="0.000114">
+      <testcase classname="fastlane.lanes" name="1: Switch to ios api_key lane" time="0.000146">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: app_store_connect_api_key" time="0.003534">
+      <testcase classname="fastlane.lanes" name="2: app_store_connect_api_key" time="0.003935">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: match" time="25.318754">
+      <testcase classname="fastlane.lanes" name="3: Switch to ios match_appstore lane" time="9.3e-05">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: Switch to ios api_key lane" time="7.2e-05">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: app_store_connect_api_key" time="0.000886">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: match" time="11.037007">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: update_code_signing_settings" time="0.05032">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="8: build_app" time="63.394472">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="9: upload_to_testflight" time="39.050589">
+        
+          <failure message="/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:214:in `block (2 levels) in parsing_binding&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/lane.rb:33:in `call&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/commands_generator.rb:354:in `run&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/fastlane-2.214.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/bin/fastlane:25:in `load&apos;&#10;/Users/mark/.rbenv/versions/3.2.2/bin/fastlane:25:in `&lt;main&gt;&apos;&#10;&#10;Error uploading ipa file: &#10; [Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key &apos;CFBundleIconName&apos; is missing in the bundle &apos;app.douwan.MSD&apos;. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: f0de80ac-5ee0-4f42-bb5f-9efdcc1618d6)&#10;[Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90022) Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &apos;120x120&apos; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: af9459bf-55c7-4fc8-a3b6-85015dfba13d)&#10;[Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90023) Missing required icon file. The bundle does not contain an app icon for iPad of exactly &apos;167x167&apos; pixels, in .png format for iOS versions supporting iPad Pro. To support older operating systems, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: d8ddd8b6-9580-4ecd-bc5d-183b1d2814e3)&#10;[Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90023) Missing required icon file. The bundle does not contain an app icon for iPad of exactly &apos;152x152&apos; pixels, in .png format for iOS versions &gt;= 10.0. To support older operating systems, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: 48d632d2-60f4-4a42-804e-432c1d59045a)&#10;[Application Loader Error Output]: Error uploading &apos;/var/folders/_z/xsxmt_396l3064bb1570_9y80000gn/T/1015ff71-8a75-49ed-9f9d-9711f6fb9d43.ipa&apos;.&#10;[Application Loader Error Output]: Asset validation failed Missing Info.plist value. A value for the Info.plist key &apos;CFBundleIconName&apos; is missing in the bundle &apos;app.douwan.MSD&apos;. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: f0de80ac-5ee0-4f42-bb5f-9efdcc1618d6) (90713)&#10;[Application Loader Error Output]: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &apos;120x120&apos; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: af9459bf-55c7-4fc8-a3b6-85015dfba13d) (90022)&#10;[Application Loader Error Output]: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPad of exactly &apos;167x167&apos; pixels, in .png format for iOS versions supporting iPad Pro. To support older operating systems, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: d8ddd8b6-9580-4ecd-bc5d-183b1d2814e3) (90023)&#10;[Application Loader Error Output]: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPad of exactly &apos;152x152&apos; pixels, in .png format for iOS versions &gt;= 10.0. To support older operating systems, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: 48d632d2-60f4-4a42-804e-432c1d59045a) (90023)&#10;[Application Loader Error Output]: The call to the altool completed with a non-zero exit status: 1. This indicates a failure." />
         
       </testcase>
     
