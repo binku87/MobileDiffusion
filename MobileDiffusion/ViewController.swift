@@ -9,6 +9,7 @@ import UIKit
 import Combine
 import Darwin
 import Foundation
+import StableDiffusion
 
 func calcMemory() -> Double {
     var info = mach_task_basic_info()
@@ -30,6 +31,7 @@ func calcMemory() -> Double {
 
 extension Notification.Name {
     static let MemoryDidWarning = NSNotification.Name("MemoryDidWarning")
+    static let AppWillTerminate = NSNotification.Name("AppWillTerminate")
 }
 
 extension NotificationCenter {
@@ -54,13 +56,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        //NotificationCenter.default.reinstall(observer: self, name: .MemoryDidWarning, selector: #selector(self.cancelImageTask))
+        NotificationCenter.default.reinstall(observer: self, name: .AppWillTerminate, selector: #selector(self.cancelImageTask))
+        NotificationCenter.default.reinstall(observer: self, name: .MemoryDidWarning, selector: #selector(self.cancelImageTask))
         _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             DispatchQueue.main.async {
                 self.i += 1
                 self.vMemory.text = "内存占用: \(calcMemory())MB\n内存可用: \(os_proc_available_memory() / 1000 / 1000)\n时间: \(self.i)"
                 let (total, available) = self.getSystemMemoryInfo()
-                if available < 100 {
+                if available < 20 {
                     switch self.generation.state {
                     case .startup:
                         break
@@ -68,9 +71,14 @@ class ViewController: UIViewController {
                         self.cancelImageTask()
                     }
                 }
-                print("时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
+                self.vMemory.text = "时间=\(self.i)\n总共=\(Int(total))\n可用=\(Int(available))\nAPP占用=\(Int(calcMemory()))\nAPP可用=\(Int(os_proc_available_memory() / 1024 / 1024))"
+                print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
             }
         }
+        loadModel()
+    }
+    
+    func loadModel() {
         Task.init {
             let loader = PipelineLoader(model: model)
             stateSubscriber = loader.statePublisher.sink { state in
@@ -88,8 +96,8 @@ class ViewController: UIViewController {
                 }
             }
             do {
-            generation.delegate = self
-              generation.pipeline = try await loader.prepare()
+                generation.delegate = self
+                generation.pipeline = try await loader.prepare()
                 self.vStatus.text = "Start"
             }  catch {
                 print("Could not load model, error: \(error)")
@@ -118,12 +126,20 @@ class ViewController: UIViewController {
     }
     
     @objc @IBAction func cancelImageTask() {
-        //print("warning: \(calcMemory()); available: \(os_proc_available_memory())")
+        print("service=diffusion action=cancel")
         //if calcMemory() > 1500 || Int(calcMemory() * 1024 * 1024) > os_proc_available_memory() {
+        let (_, free) = getSystemMemoryInfo()
+        //if free < 60 {
         self.vStatus.text = "Cancelled"
-        generation.cancelGeneration()
-        imageTask?.cancel()
-        generation.state = .running(nil)
+        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadResources()
+        //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
+        //print("------")
+        //self.loadModel()
+        //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
+            /*generation.cancelGeneration()
+            imageTask?.cancel()
+            generation.state = .userCanceled*/
+        //}
     }
     
     func getSystemMemoryInfo() -> (totalMemoryMB: Double, freeMemoryMB: Double) {
@@ -165,7 +181,8 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: GenerationContextDelegate {
-    func generationDidUdpateProgress() {
+    func generationDidUdpateProgress(progress: StableDiffusionProgress) {
+        self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
         if let cgImage = generation.previewImage {
             self.vImage.image = UIImage(cgImage: cgImage)
         }

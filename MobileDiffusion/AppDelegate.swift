@@ -34,5 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: .MemoryDidWarning, object: nil)
     }
 
+    func applicationWillTerminate(_ application: UIApplication) {
+        NotificationCenter.default.post(name: .AppWillTerminate, object: nil)
+    }
 }
 

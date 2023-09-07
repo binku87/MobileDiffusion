@@ -12,7 +12,7 @@ import Combine
 
 import StableDiffusion
 
-struct StableDiffusionProgress {
+public struct StableDiffusionProgress {
     var progress: StableDiffusionPipeline.Progress
 
     var step: Int { progress.step }
@@ -108,6 +108,8 @@ class Pipeline {
                                                    previewIndices: previewIndices),
                            sampleTimer: sampleTimer)
             if progress.stepCount != progress.step {
+                //Thread.sleep(forTimeInterval: 3.0)
+                print("Start...")
                 sampleTimer.start()
             }
             return !canceled

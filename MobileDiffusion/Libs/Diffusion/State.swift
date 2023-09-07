@@ -67,7 +67,7 @@ class GenerationContext: ObservableObject {
     @Published var numImages = 1.0
     @Published var seed: UInt32 = 0
     @Published var guidanceScale = 7.5
-    @Published var previews = 5.0
+    @Published var previews = 2.0
     @Published var disableSafety = false
     @Published var previewImage: CGImage? = nil
 
@@ -84,7 +84,7 @@ class GenerationContext: ObservableObject {
             previewImage = newImage
         }
         
-        delegate?.generationDidUdpateProgress()
+        delegate?.generationDidUdpateProgress(progress: progress)
     }
 
     func generate() async throws -> GenerationResult {
@@ -107,7 +107,7 @@ class GenerationContext: ObservableObject {
 }
 
 public protocol GenerationContextDelegate: NSObject {
-    func generationDidUdpateProgress()
+    func generationDidUdpateProgress(progress: StableDiffusionProgress)
 }
 
 class Settings {
