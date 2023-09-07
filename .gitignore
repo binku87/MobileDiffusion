@@ -1,0 +1,6 @@
+.DS_Store
+*.ipa
+Pods/*
+ipas/*
+xcuserdata/
+xcshareddata/

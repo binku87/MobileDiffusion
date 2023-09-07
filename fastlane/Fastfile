@@ -1,0 +1,288 @@
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+require 'spaceship'
+Spaceship::ConnectAPI::App.const_set('ESSENTIAL_INCLUDES', 'appStoreVersions')
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# default_platform(:ios)
+
+# platform :ios do
+#   desc "Push a new release build to the App Store"
+#   lane :release do
+#     increment_build_number(xcodeproj: "MakeUp.xcodeproj")
+#     build_app(workspace: "MakeUp.xcworkspace", scheme: "MakeUp")
+#     upload_to_app_store
+#   end
+# end
+
+default_platform(:ios)
+identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+team_id = CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
+
+def upload_to_alioss()
+  description = "正式环境"
+  print "====== upload_to_alioss ======"
+  # 上传App到阿里云oss服务器
+  alioss(
+    endpoint: "oss-cn-hangzhou.aliyuncs.com",
+    access_key_id: "LTAI5tAo8XiM7nF2XUpnKvWw",
+    access_key_secret: "DSw1flXEGq4BPjiW4kZofbPzoSKncV",
+    bucket_name: "general-api",
+    app_name: "app/#{ENV["TARGET"].downcase}",
+    download_domain: "https://oss.douwantech.com/",
+    update_description: "#{description}",
+  )
+end
+
+platform :ios do
+  desc "构建一个正式环境版本上传至pgyer"
+  lane :adhoc do |option|
+    match_adhoc
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "#{ENV["TARGET"]}.xcodeproj",
+      team_id: team_id,
+      targets: ENV["TARGET"],
+      build_configurations: "Release",
+      code_sign_identity: ENV["SIGN_IDENTITY"],
+    )
+
+    build_app(
+      export_method: "ad-hoc",
+      workspace: "#{ENV["TARGET"]}.xcworkspace",
+      configuration: "Release",
+      scheme: ENV["TARGET"],
+      clean: true,
+      output_directory: "./build/output/Release_#{Time.now.strftime("%Y%m%d%H%M%S")}",
+      output_name: "#{ENV['TARGET']}.ipa",
+      export_options: {
+        method: "app-store",
+        signingCertificate: ENV["SIGN_IDENTITY"],
+        teamID: team_id,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "#{identifier}" => "match AdHoc #{identifier}",
+        },
+      },
+    )
+    upload_to_alioss()
+  end
+
+  desc "Match dev"
+  lane :match_dev do
+    api_key
+    register_devices(devices_file: "./devices.txt")
+    match(type: "development", force_for_new_devices: true)
+  end
+
+  desc "Match prod"
+  lane :match_prod do
+    api_key
+    register_devices(devices_file: "./devices.txt")
+    match(type: "appstore", force_for_new_devices: true)
+  end
+
+  desc "Match nuke dev"
+  lane :match_nuke_dev do
+    match_nuke(type: "development", api_key: api_key)
+  end
+
+  desc "Match nuke appstore"
+  lane :match_nuke_appstore do
+    match_nuke(type: "appstore", api_key: api_key)
+  end
+
+  desc "Match appstore"
+  lane :match_appstore do
+    api_key
+    match(type: "appstore")
+  end
+
+  desc "Match adhoc"
+  lane :match_adhoc do
+    api_key
+    register_devices(devices_file: "./devices.txt")
+    match(type: "adhoc", force_for_new_devices: true)
+  end
+
+  desc "match setup appstore"
+  lane :setup_match_appstore do
+    setup
+    match(
+      type: "appstore",
+      readonly: true,
+      keychain_name: "action.keychain",
+      keychain_password: ENV["MATCH_PASSWORD"]
+    )
+  end
+
+  desc "build"
+  lane :ci_release do
+    setup_match_appstore
+    api_key
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "#{ENV["TARGET"]}.xcodeproj",
+      team_id: team_id,
+      targets: ENV["TARGET"],
+      build_configurations: "Release",
+      code_sign_identity: ENV["SIGN_IDENTITY"],
+    )
+
+    build_app(
+      workspace: "#{ENV["TARGET"]}.xcworkspace",
+      scheme: ENV["TARGET"],
+      export_method: "app-store",
+      output_directory: "build",
+      clean: true,
+      export_team_id: team_id,
+      output_name: "#{ENV["TARGET"]}.ipa",
+      export_options: {
+        method: "app-store",
+        signingCertificate: ENV["SIGN_IDENTITY"],
+        teamID: team_id,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "#{identifier}" => "match AppStore #{identifier}",
+        },
+      },
+    )
+
+    optional_changelog = %Q{
+  	Beta Test
+    }
+
+    upload_to_testflight(
+	changelog: optional_changelog,
+	distribute_external: true,
+	groups: ["PublicBeta"],
+	notify_external_testers: true,
+    )
+
+    slack_message(targets: ENV["TARGET"])
+  end
+
+  desc "build"
+  lane :release do
+    api_key
+    match_appstore
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "#{ENV["TARGET"]}.xcodeproj",
+      team_id: team_id,
+      targets: ENV["TARGET"],
+      build_configurations: "Release",
+      code_sign_identity: ENV["SIGN_IDENTITY"],
+    )
+
+    build_app(
+      workspace: "#{ENV["TARGET"]}.xcworkspace",
+      scheme: ENV["TARGET"],
+      export_method: "app-store",
+      output_directory: "ipas",
+      clean: true,
+      export_team_id: team_id,
+      output_name: "#{ENV["TARGET"]}.ipa",
+      export_options: {
+        method: "app-store",
+        signingCertificate: ENV["SIGN_IDENTITY"],
+        teamID: team_id,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "#{identifier}" => "match AppStore #{identifier}",
+        },
+      },
+    )
+
+    optional_changelog = %Q{
+  	Beta Test
+    }
+
+    upload_to_testflight(
+	changelog: optional_changelog,
+	distribute_external: true,
+	groups: ["PublicBeta"],
+	notify_external_testers: true,
+    )
+    slack_message(targets: ENV["TARGET"])
+  end
+
+  #### Private ####
+  private_lane :api_key do
+    app_store_connect_api_key(
+      key_id: ENV["KEY_ID"],
+      issuer_id: ENV["ISSUER_ID"],
+      key_content: ENV["AUTHKEY"],
+      duration: 1200,
+      in_house: false,
+      is_key_content_base64: true,
+    )
+  end
+
+  private_lane :setup do
+    # xcode_select("/Applications/Xcode_12.1.app")
+    # cocoapods(
+    #   clean_install: true,
+    #   podfile: "./Podfile"
+    # )
+    create_keychain(
+      name: "action.keychain",
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false,
+      require_create: false
+    )
+
+    sh("security list-keychains -d user")
+    sh("security default-keychain -d user")
+    sh("security find-identity -v -p codesigning action.keychain")
+  end
+
+  private_lane :slack_message do |options|
+    build_number = get_build_number(xcodeproj: "#{ENV["TARGET"]}.xcodeproj")
+    slack(
+      message: "App successfully uploaded to iTunesConnect.",
+      success: true,
+      slack_url: "https://hooks.slack.com/services/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",
+      attachment_properties: {
+        fields: [
+          {
+                title: "Build number",
+                value: build_number,
+              },
+          {
+                title: "Targets",
+                value: options[:targets],
+              },
+        ],
+      },
+    )
+  end
+end
+
+#   private_lane :notify_to_wxchat do |options|
+#     url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"
+#     content = ""
+#     if options[:type] == "finished"
+#       content = "target=#{options[:targets]} 打包成功"
+#     else
+#       content = "target=#{options[:targets]} 开始打包"
+#     end
+#     work_wechat(webhook_URL: url, markdown_content: content)
+#   end
+# end%

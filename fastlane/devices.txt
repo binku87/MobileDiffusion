@@ -1,0 +1,2 @@
+Device ID	Device Name	Device Platform
+c00153dd2815741ec61166c0cf633bf2857ba5d3	Nx	ios

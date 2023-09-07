@@ -1,0 +1,3 @@
+git_url("git@github.com:douwantech/fastlane-certificates.git")
+git_branch("sunfjun")
+storage_mode("git")
