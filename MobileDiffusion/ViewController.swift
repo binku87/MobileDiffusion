@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var vPrompt: UITextField!
     @IBOutlet weak var vMemory: UILabel!
     
-    let model = ModelInfo.v14Base
+    let model = ModelInfo.v21Base
     var generation = GenerationContext()
     var stateSubscriber: Cancellable?
     var imageTask: Task<Void, Never>? = nil
