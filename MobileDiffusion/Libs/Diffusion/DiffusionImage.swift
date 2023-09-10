@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import StableDiffusion
 import CoreTransferable
 
 /// Tracking for a `DiffusionImage` generation state.

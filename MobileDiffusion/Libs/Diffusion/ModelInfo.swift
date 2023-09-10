@@ -151,8 +151,7 @@ extension ModelInfo {
         modelId: "apple/coreml-stable-diffusion-2-base-palettized",
         modelVersion: "StabilityAI SD 2.0 [6 bit]",
         supportsEncoder: true,
-        supportsAttentionV2: true,
-        quantized: true
+        supportsAttentionV2: true
     )
 
     static let v21Base = ModelInfo(

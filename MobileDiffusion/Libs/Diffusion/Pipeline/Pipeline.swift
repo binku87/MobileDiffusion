@@ -8,9 +8,8 @@
 
 import Foundation
 import CoreML
-import Combine
-
 import StableDiffusion
+import Combine
 
 public struct StableDiffusionProgress {
     var progress: StableDiffusionPipeline.Progress
@@ -25,9 +24,11 @@ public struct StableDiffusionProgress {
         self.currentImages = [nil]
 
         // Since currentImages is a computed property, only access the preview image if necessary
-        if progress.step < previewIndices.count, previewIndices[progress.step] {
+        //if progress.step < previewIndices.count, previewIndices[progress.step] {
+        if [0, 8, 15, 19, 20].contains(progress.step) {
             self.currentImages = progress.currentImages
         }
+        //}
     }
 }
 
@@ -68,7 +69,7 @@ class Pipeline {
         prompt: String,
         negativePrompt: String = "",
         scheduler: StableDiffusionScheduler,
-        numInferenceSteps stepCount: Int = 50,
+        numInferenceSteps stepCount: Int = 20,
         seed: UInt32 = 0,
         numPreviews previewCount: Int = 5,
         guidanceScale: Float = 7.5,

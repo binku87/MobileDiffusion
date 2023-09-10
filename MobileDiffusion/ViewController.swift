@@ -9,18 +9,17 @@ import UIKit
 import Combine
 import Darwin
 import Foundation
-import StableDiffusion
 
 func calcMemory() -> Double {
     var info = mach_task_basic_info()
     var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-    
+
     let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
         $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
             task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
         }
     }
-    
+
     if kerr == KERN_SUCCESS {
         let usedMB = Double(info.resident_size) / 1024.0 / 1024.0
         return usedMB
@@ -46,13 +45,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var vImage: UIImageView!
     @IBOutlet weak var vPrompt: UITextField!
     @IBOutlet weak var vMemory: UILabel!
-    
+    @IBOutlet weak var vAction: UIButton!
+
     let model = ModelInfo.v21Base
     var generation = GenerationContext()
     var stateSubscriber: Cancellable?
     var imageTask: Task<Void, Never>? = nil
     var i = 0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -72,12 +72,12 @@ class ViewController: UIViewController {
                     }
                 }
                 self.vMemory.text = "时间=\(self.i)\n总共=\(Int(total))\n可用=\(Int(available))\nAPP占用=\(Int(calcMemory()))\nAPP可用=\(Int(os_proc_available_memory() / 1024 / 1024))"
-                print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
+                //print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
             }
         }
         loadModel()
     }
-    
+
     func loadModel() {
         Task.init {
             let loader = PipelineLoader(model: model)
@@ -104,19 +104,30 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     @IBAction func tapGenerate() {
-        if case .running = generation.state { return }
-        self.i = 0
         vPrompt.resignFirstResponder()
+        if case .running = generation.state {
+            self.vAction.setTitle("生成", for: .normal)
+            generation.cancelGeneration()
+            imageTask?.cancel()
+            generation.state = .userCanceled
+            return
+        }
+        self.i = 0
+        self.vAction.setTitle("取消", for: .normal)
         imageTask = Task {
             self.vStatus.text = "Generating"
             generation.state = .running(nil)
             do {
                 self.vImage.image = nil
                 generation.positivePrompt = vPrompt.text ?? "Dog"
+                generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
                 let result = try await generation.generate()
                 generation.state = .complete(generation.positivePrompt, result.image, result.lastSeed, result.interval)
+                /*if let cgImage = generation.previewImage {
+                    self.vImage.image = UIImage(cgImage: cgImage)
+                }*/
                 self.vStatus.text = "Done"
             } catch {
                 generation.state = .failed(error)
@@ -124,15 +135,15 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     @objc @IBAction func cancelImageTask() {
         print("service=diffusion action=cancel")
         //if calcMemory() > 1500 || Int(calcMemory() * 1024 * 1024) > os_proc_available_memory() {
         let (_, free) = getSystemMemoryInfo()
-        //if free < 60 {
-        self.vStatus.text = "Cancelled"
-//        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadResources()
-        (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadUnetResources()
+        if free < 60 {
+            //self.vStatus.text = "Cancelled"
+            //(generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadUnetResources()
+        }
         //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
         //print("------")
         //self.loadModel()
@@ -142,22 +153,22 @@ class ViewController: UIViewController {
             generation.state = .userCanceled*/
         //}
     }
-    
+
     func getSystemMemoryInfo() -> (totalMemoryMB: Double, freeMemoryMB: Double) {
         var totalMemory: UInt64 = 0
         var freeMemory: vm_size_t = 0
-        
+
         // 获取总内存大小
         var mib: [Int32] = [CTL_HW, HW_MEMSIZE]
         var length = MemoryLayout<UInt64>.size
         sysctl(&mib, 2, &totalMemory, &length, nil, 0)
-        
+
         // 获取可用内存大小
         var page_size: vm_size_t = 0
         var vm_stats = vm_statistics64()
         var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size)
         host_page_size(mach_host_self(), &page_size)
-        
+
         withUnsafeMutablePointer(to: &vm_stats) { (vmStatsPointer) in
             _ = withUnsafeMutablePointer(to: &count) { (countPointer) in
                 vmStatsPointer.withMemoryRebound(to: integer_t.self, capacity: 1) { reboundPointer in
@@ -170,21 +181,21 @@ class ViewController: UIViewController {
                 }
             }
         }
-        
+
         freeMemory = vm_size_t(vm_stats.free_count) * page_size
 
         // 转换为MB
         let totalMemoryMB = Double(totalMemory) / 1024 / 1024
         let freeMemoryMB = Double(freeMemory) / 1024 / 1024
-        
+
         return (totalMemoryMB, freeMemoryMB)
     }
 }
 
 extension ViewController: GenerationContextDelegate {
-    func generationDidUdpateProgress(progress: StableDiffusionProgress) {
+    func generationDidUdpateProgress(progress: StableDiffusionProgress, image: CGImage?) {
         self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
-        if let cgImage = generation.previewImage {
+        if let cgImage = image {
             self.vImage.image = UIImage(cgImage: cgImage)
         }
     }

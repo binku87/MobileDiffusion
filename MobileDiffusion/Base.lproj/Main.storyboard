@@ -78,6 +78,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="vAction" destination="J3c-6N-Ugw" id="Ohh-kC-DWl"/>
                         <outlet property="vImage" destination="5QP-Ci-fKJ" id="AVa-Ib-a3h"/>
                         <outlet property="vMemory" destination="pJe-7V-Py1" id="TZo-DX-6gC"/>
                         <outlet property="vPrompt" destination="kpJ-aX-lil" id="0AO-Ov-l8t"/>

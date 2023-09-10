@@ -8,8 +8,8 @@
 
 import Combine
 import SwiftUI
-import StableDiffusion
 import CoreML
+import StableDiffusion
 
 let DEFAULT_MODEL = ModelInfo.v2Base
 let DEFAULT_PROMPT = "Labrador in the style of Vermeer"
@@ -63,7 +63,7 @@ class GenerationContext: ObservableObject {
     @Published var negativePrompt = ""
     
     // FIXME: Double to support the slider component
-    @Published var steps = 25.0
+    @Published var steps = 20
     @Published var numImages = 1.0
     @Published var seed: UInt32 = 0
     @Published var guidanceScale = 7.5
@@ -76,15 +76,19 @@ class GenerationContext: ObservableObject {
     private var progressSubscriber: Cancellable?
 
     private func updatePreviewIfNeeded(_ progress: StableDiffusionProgress) {
-        if previews == 0 || progress.step == 0 {
+        /*if previews == 0 || progress.step == 0 {
             previewImage = nil
         }
 
         if previews > 0, let newImage = progress.currentImages.first, newImage != nil {
             previewImage = newImage
+        }*/
+        
+        if let newImage = progress.currentImages.first, newImage != nil {
+            previewImage = newImage
         }
         
-        delegate?.generationDidUdpateProgress(progress: progress)
+        delegate?.generationDidUdpateProgress(progress: progress, image: previewImage)
     }
 
     func generate() async throws -> GenerationResult {
@@ -107,7 +111,7 @@ class GenerationContext: ObservableObject {
 }
 
 public protocol GenerationContextDelegate: NSObject {
-    func generationDidUdpateProgress(progress: StableDiffusionProgress)
+    func generationDidUdpateProgress(progress: StableDiffusionProgress, image: CGImage?)
 }
 
 class Settings {

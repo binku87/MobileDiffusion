@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18663D9F2AADFFDE0051DAD2 /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 18663D9E2AADFFDE0051DAD2 /* StableDiffusion */; };
 		187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57362AA5E18B00C41ABF /* AppDelegate.swift */; };
 		187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57382AA5E18B00C41ABF /* SceneDelegate.swift */; };
 		187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E573A2AA5E18B00C41ABF /* ViewController.swift */; };
@@ -20,13 +21,17 @@
 		187E57582AA60B2800C41ABF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57502AA60B2800C41ABF /* Utils.swift */; };
 		187E57592AA60B2800C41ABF /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57522AA60B2800C41ABF /* Pipeline.swift */; };
 		187E575A2AA60B2800C41ABF /* PipelineLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57532AA60B2800C41ABF /* PipelineLoader.swift */; };
-		187E575D2AA60CFE00C41ABF /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 187E575C2AA60CFE00C41ABF /* StableDiffusion */; };
 		187E57602AA6146D00C41ABF /* DifussionImage+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E575F2AA6146D00C41ABF /* DifussionImage+iOS.swift */; };
 		B081F0882172531F4D67164A /* Pods_MobileDiffusion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B504F210BF4F28A88973A22 /* Pods_MobileDiffusion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0C9DFBE3A1E39CA5F3B632D3 /* Pods-MobileDiffusion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileDiffusion.debug.xcconfig"; path = "Target Support Files/Pods-MobileDiffusion/Pods-MobileDiffusion.debug.xcconfig"; sourceTree = "<group>"; };
+		18663D982AADFF290051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
+		18663D992AADFF440051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
+		18663D9A2AADFF6F0051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
+		18663D9B2AADFFA10051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
+		18663D9C2AADFFBC0051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
 		187E57332AA5E18B00C41ABF /* MobileDiffusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileDiffusion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187E57362AA5E18B00C41ABF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		187E57382AA5E18B00C41ABF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,16 +59,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				B081F0882172531F4D67164A /* Pods_MobileDiffusion.framework in Frameworks */,
-				187E575D2AA60CFE00C41ABF /* StableDiffusion in Frameworks */,
+				18663D9F2AADFFDE0051DAD2 /* StableDiffusion in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18663D972AADFF290051DAD2 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				18663D982AADFF290051DAD2 /* ml-stable-diffusion-me */,
+				18663D992AADFF440051DAD2 /* ml-stable-diffusion-me */,
+				18663D9A2AADFF6F0051DAD2 /* ml-stable-diffusion-me */,
+				18663D9B2AADFFA10051DAD2 /* ml-stable-diffusion-me */,
+				18663D9C2AADFFBC0051DAD2 /* ml-stable-diffusion-me */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		187E572A2AA5E18B00C41ABF = {
 			isa = PBXGroup;
 			children = (
+				18663D972AADFF290051DAD2 /* Packages */,
 				187E57352AA5E18B00C41ABF /* MobileDiffusion */,
 				187E57342AA5E18B00C41ABF /* Products */,
 				35F31C9CC6B0C7BFDE7330F3 /* Pods */,
@@ -154,7 +172,7 @@
 				187E572F2AA5E18B00C41ABF /* Sources */,
 				187E57302AA5E18B00C41ABF /* Frameworks */,
 				187E57312AA5E18B00C41ABF /* Resources */,
-				FDB2381E54733BFF1E8F672C /* [CP] Embed Pods Frameworks */,
+				E86E5F6E803D3D5F4D3C1AF2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -162,7 +180,7 @@
 			);
 			name = MobileDiffusion;
 			packageProductDependencies = (
-				187E575C2AA60CFE00C41ABF /* StableDiffusion */,
+				18663D9E2AADFFDE0051DAD2 /* StableDiffusion */,
 			);
 			productName = MobileDiffusion;
 			productReference = 187E57332AA5E18B00C41ABF /* MobileDiffusion.app */;
@@ -193,7 +211,7 @@
 			);
 			mainGroup = 187E572A2AA5E18B00C41ABF;
 			packageReferences = (
-				187E575B2AA60CFE00C41ABF /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */,
+				18663D9D2AADFFDE0051DAD2 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */,
 			);
 			productRefGroup = 187E57342AA5E18B00C41ABF /* Products */;
 			projectDirPath = "";
@@ -240,7 +258,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FDB2381E54733BFF1E8F672C /* [CP] Embed Pods Frameworks */ = {
+		E86E5F6E803D3D5F4D3C1AF2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -510,9 +528,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		187E575B2AA60CFE00C41ABF /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */ = {
+		18663D9D2AADFFDE0051DAD2 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/ml-stable-diffusion";
+			repositoryURL = "git@github.com:binku87/ml-stable-diffusion.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -521,9 +539,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		187E575C2AA60CFE00C41ABF /* StableDiffusion */ = {
+		18663D9E2AADFFDE0051DAD2 /* StableDiffusion */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 187E575B2AA60CFE00C41ABF /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */;
+			package = 18663D9D2AADFFDE0051DAD2 /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */;
 			productName = StableDiffusion;
 		};
 /* End XCSwiftPackageProductDependency section */
