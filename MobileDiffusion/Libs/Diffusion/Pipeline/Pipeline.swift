@@ -21,7 +21,7 @@ public struct StableDiffusionProgress {
 
     init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
         self.progress = progress
-        if [0, 8, 15, progress.stepCount].contains(progress.step) {
+        if [0, 8, 15].contains(progress.step) {
             self.currentImages = progress.currentImages
         } else {
             self.currentImages = []
@@ -80,7 +80,7 @@ class Pipeline {
         prompt: String,
         negativePrompt: String = "",
         scheduler: StableDiffusionScheduler,
-        numInferenceSteps stepCount: Int = 20,
+        numInferenceSteps stepCount: Int = 2,
         seed: UInt32 = 0,
         numPreviews previewCount: Int = 5,
         guidanceScale: Float = 7.5,
@@ -110,12 +110,6 @@ class Pipeline {
         let previewIndices = previewIndices(stepCount, previewCount)
 
         let images = try pipeline.generateImages(configuration: config) { p in
-            if canceled {
-                pipeline.unloadResources()
-                sampleTimer.stop()
-                canceled = false
-                return false
-            }
             sampleTimer.stop()
             let newProgress = StableDiffusionProgress(progress: p, previewIndices: previewIndices)
             handleProgress(newProgress, sampleTimer: sampleTimer)

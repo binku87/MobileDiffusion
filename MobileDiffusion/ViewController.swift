@@ -60,16 +60,15 @@ class ViewController: UIViewController {
         _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             DispatchQueue.main.async {
                 self.i += 1
-                self.vMemory.text = "内存占用: \(calcMemory())MB\n内存可用: \(os_proc_available_memory() / 1000 / 1000)\n时间: \(self.i)"
                 let (total, available) = self.getSystemMemoryInfo()
-                if available < 20 {
+                /*if available < 20 {
                     switch self.generation.state {
                     case .startup:
                         break
                     default:
                         self.cancelImageTask()
                     }
-                }
+                }*/
                 self.vMemory.text = "时间=\(self.i)\n总共=\(Int(total))\n可用=\(Int(available))\nAPP占用=\(Int(calcMemory()))\nAPP可用=\(Int(os_proc_available_memory() / 1024 / 1024))"
                 //print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
             }
@@ -123,6 +122,9 @@ class ViewController: UIViewController {
                 generation.positivePrompt = (vPrompt.text?.isEmpty ?? true) ? "Dog" : vPrompt.text!
                 generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
                 let result = try await generation.generate()
+                if let cgImage =  result.image {
+                    self.vImage.image = UIImage(cgImage: cgImage)
+                }
                 generation.state = .complete(generation.positivePrompt, result.image, result.lastSeed, result.interval)
                 self.vStatus.text = "Done"
             } catch {

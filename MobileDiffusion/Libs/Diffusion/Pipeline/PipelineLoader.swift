@@ -79,7 +79,7 @@ extension PipelineLoader {
 
 extension PipelineLoader {
     var url: URL {
-        return URL(string: "http://192.168.0.29:8000/majicmixRealistic_v6_split_einsum.zip")!
+        return URL(string: "http://192.168.0.29:8000/samaritan-3d-cartoon.zip")!
         //return model.modelURL(for: variant)
         //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-1-4_split_einsum_compiled.zip")!
         //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip")!
