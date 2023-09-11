@@ -21,14 +21,21 @@ public struct StableDiffusionProgress {
 
     init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
         self.progress = progress
-        self.currentImages = [nil]
+        self.currentImages = progress.currentImages
 
         // Since currentImages is a computed property, only access the preview image if necessary
         //if progress.step < previewIndices.count, previewIndices[progress.step] {
-        if [0, 8, 15, 19, 20].contains(progress.step) {
-            self.currentImages = progress.currentImages
-        }
+        //if [0, 8, 15, 19, 20].contains(progress.step) {
+            //self.currentImages = progress.currentImages
         //}
+        //}
+    }
+    
+    var image: CGImage? {
+        if let newImage = self.currentImages.first, newImage != nil {
+            return newImage
+        }
+        return nil
     }
 }
 
@@ -73,7 +80,9 @@ class Pipeline {
         seed: UInt32 = 0,
         numPreviews previewCount: Int = 5,
         guidanceScale: Float = 7.5,
-        disableSafety: Bool = false
+        disableSafety: Bool = false,
+        progress: @escaping (StableDiffusionProgress) -> Void,
+        debug: Bool = false
     ) throws -> GenerationResult {
         let beginDate = Date()
         canceled = false
@@ -89,6 +98,7 @@ class Pipeline {
         config.disableSafety = disableSafety
         config.schedulerType = scheduler.asStableDiffusionScheduler()
         config.useDenoisedIntermediates = true
+        config.isDebug = debug
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025
@@ -97,7 +107,7 @@ class Pipeline {
         // Evenly distribute previews based on inference steps
         let previewIndices = previewIndices(stepCount, previewCount)
 
-        let images = try pipeline.generateImages(configuration: config) { progress in
+        let images = try pipeline.generateImages(configuration: config) { p in
             if canceled {
                 pipeline.unloadResources()
                 sampleTimer.stop()
@@ -105,10 +115,10 @@ class Pipeline {
                 return false
             }
             sampleTimer.stop()
-            handleProgress(StableDiffusionProgress(progress: progress,
-                                                   previewIndices: previewIndices),
-                           sampleTimer: sampleTimer)
-            if progress.stepCount != progress.step {
+            let newProgress = StableDiffusionProgress(progress: p, previewIndices: previewIndices)
+            handleProgress(newProgress, sampleTimer: sampleTimer)
+            progress(newProgress)
+            if p.stepCount != p.step {
                 //Thread.sleep(forTimeInterval: 3.0)
                 print("Start...")
                 sampleTimer.start()

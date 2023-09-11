@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        print("warninghttps://res.eco.mi.com/utrend/web/")
         NotificationCenter.default.post(name: .MemoryDidWarning, object: nil)
     }
 

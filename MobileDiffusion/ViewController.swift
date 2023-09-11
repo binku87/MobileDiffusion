@@ -52,7 +52,6 @@ class ViewController: UIViewController {
     var stateSubscriber: Cancellable?
     var imageTask: Task<Void, Never>? = nil
     var i = 0
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -97,7 +96,7 @@ class ViewController: UIViewController {
             }
             do {
                 generation.delegate = self
-                generation.pipeline = try await loader.prepare()
+                generation.pipeline = try await loader.prepare(debug: isDebug)
                 self.vStatus.text = "Start"
             }  catch {
                 print("Could not load model, error: \(error)")
@@ -123,7 +122,7 @@ class ViewController: UIViewController {
                 self.vImage.image = nil
                 generation.positivePrompt = vPrompt.text ?? "Dog"
                 generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
-                let result = try await generation.generate()
+                let result = try await generation.generate(debug: isDebug)
                 generation.state = .complete(generation.positivePrompt, result.image, result.lastSeed, result.interval)
                 /*if let cgImage = generation.previewImage {
                     self.vImage.image = UIImage(cgImage: cgImage)
@@ -137,21 +136,13 @@ class ViewController: UIViewController {
     }
 
     @objc @IBAction func cancelImageTask() {
-        print("service=diffusion action=cancel")
+        //print("service=diffusion action=cancel")
         //if calcMemory() > 1500 || Int(calcMemory() * 1024 * 1024) > os_proc_available_memory() {
         let (_, free) = getSystemMemoryInfo()
         if free < 60 {
             //self.vStatus.text = "Cancelled"
             //(generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadUnetResources()
         }
-        //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
-        //print("------")
-        //self.loadModel()
-        //try? (generation.pipeline?.pipeline as? StableDiffusionPipeline)?.loadResources()
-            /*generation.cancelGeneration()
-            imageTask?.cancel()
-            generation.state = .userCanceled*/
-        //}
     }
 
     func getSystemMemoryInfo() -> (totalMemoryMB: Double, freeMemoryMB: Double) {
@@ -193,10 +184,12 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: GenerationContextDelegate {
-    func generationDidUdpateProgress(progress: StableDiffusionProgress, image: CGImage?) {
-        self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
-        if let cgImage = image {
-            self.vImage.image = UIImage(cgImage: cgImage)
+    func generationDidUdpateProgress(progress: StableDiffusionProgress) {
+        DispatchQueue.main.async {
+            self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
+            if let cgImage = progress.image {
+                self.vImage.image = UIImage(cgImage: cgImage)
+            }
         }
     }
 }

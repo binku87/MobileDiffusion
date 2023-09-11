@@ -84,14 +84,14 @@ class GenerationContext: ObservableObject {
             previewImage = newImage
         }*/
         
-        if let newImage = progress.currentImages.first, newImage != nil {
+        /*if let newImage = progress.currentImages.first, newImage != nil {
             previewImage = newImage
         }
         
-        delegate?.generationDidUdpateProgress(progress: progress, image: previewImage)
+        delegate?.generationDidUdpateProgress(progress: progress, image: previewImage)*/
     }
 
-    func generate() async throws -> GenerationResult {
+    func generate(debug: Bool) async throws -> GenerationResult {
         guard let pipeline = pipeline else { throw "No pipeline" }
         return try pipeline.generate(
             prompt: positivePrompt,
@@ -101,7 +101,11 @@ class GenerationContext: ObservableObject {
             seed: seed,
             numPreviews: Int(previews),
             guidanceScale: Float(guidanceScale),
-            disableSafety: disableSafety
+            disableSafety: disableSafety,
+            progress: { p in
+                self.delegate?.generationDidUdpateProgress(progress: p)
+            },
+            debug: debug
         )
     }
     
@@ -111,7 +115,7 @@ class GenerationContext: ObservableObject {
 }
 
 public protocol GenerationContextDelegate: NSObject {
-    func generationDidUdpateProgress(progress: StableDiffusionProgress, image: CGImage?)
+    func generationDidUdpateProgress(progress: StableDiffusionProgress)
 }
 
 class Settings {

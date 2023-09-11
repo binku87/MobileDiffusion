@@ -116,7 +116,7 @@ extension PipelineLoader {
         }
     }
     
-    func prepare() async throws -> Pipeline {
+    func prepare(debug: Bool) async throws -> Pipeline {
         do {
             do {
                 try FileManager.default.createDirectory(atPath: PipelineLoader.models.path, withIntermediateDirectories: true, attributes: nil)
@@ -126,7 +126,7 @@ extension PipelineLoader {
 
             try await download()
             try await unzip()
-            let pipeline = try await load(url: compiledURL)
+            let pipeline = try await load(url: compiledURL, debug: debug)
             return Pipeline(pipeline, maxSeed: maxSeed)
         } catch {
             state = .failed(error)
@@ -168,29 +168,31 @@ extension PipelineLoader {
         case other(String)
     }
 
-    func load(url: URL) async throws -> StableDiffusionPipelineProtocol {
-            let beginDate = Date()
-            let configuration = MLModelConfiguration()
-            configuration.computeUnits = computeUnits
-            let pipeline: StableDiffusionPipelineProtocol
-            if model.isXL {
-                if #available(macOS 14.0, iOS 17.0, *) {
-                    pipeline = try StableDiffusionXLPipeline(resourcesAt: url,
-                                                           configuration: configuration,
-                                                           reduceMemory: model.reduceMemory)
-                } else {
-                    throw "Stable Diffusion XL requires macOS 14"
-                }
+    func load(url: URL, debug: Bool) async throws -> StableDiffusionPipelineProtocol {
+        let beginDate = Date()
+        let configuration = MLModelConfiguration()
+        configuration.computeUnits = computeUnits
+        let pipeline: StableDiffusionPipelineProtocol
+        if model.isXL {
+            if #available(macOS 14.0, iOS 17.0, *) {
+                pipeline = try StableDiffusionXLPipeline(resourcesAt: url,
+                                                       configuration: configuration,
+                                                       reduceMemory: model.reduceMemory)
             } else {
-                pipeline = try StableDiffusionPipeline(resourcesAt: url,
-                                                           controlNet: [],
-                                                           configuration: configuration,
-                                                           disableSafety: false,
-                                                           reduceMemory: model.reduceMemory)
+                throw "Stable Diffusion XL requires macOS 14"
             }
-            //try pipeline.loadResources()
-            print("Pipeline loaded in \(Date().timeIntervalSince(beginDate))")
-            state = .loaded
-            return pipeline
+        } else {
+            pipeline = try StableDiffusionPipeline(resourcesAt: url,
+                                                       controlNet: [],
+                                                       configuration: configuration,
+                                                       disableSafety: true,
+                                                       reduceMemory: model.reduceMemory)
+        }
+        if !debug {
+            try pipeline.loadResources()
+        }
+        print("Pipeline loaded in \(Date().timeIntervalSince(beginDate))")
+        state = .loaded
+        return pipeline
     }
 }
