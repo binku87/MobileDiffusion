@@ -91,7 +91,7 @@ class GenerationContext: ObservableObject {
         delegate?.generationDidUdpateProgress(progress: progress, image: previewImage)*/
     }
 
-    func generate(debug: Bool) async throws -> GenerationResult {
+    func generate() async throws -> GenerationResult {
         guard let pipeline = pipeline else { throw "No pipeline" }
         return try pipeline.generate(
             prompt: positivePrompt,
@@ -104,8 +104,7 @@ class GenerationContext: ObservableObject {
             disableSafety: disableSafety,
             progress: { p in
                 self.delegate?.generationDidUdpateProgress(progress: p)
-            },
-            debug: debug
+            }
         )
     }
     

@@ -21,7 +21,11 @@ public struct StableDiffusionProgress {
 
     init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
         self.progress = progress
-        self.currentImages = progress.currentImages
+        if [0, 8, 15, progress.stepCount].contains(progress.step) {
+            self.currentImages = progress.currentImages
+        } else {
+            self.currentImages = []
+        }
 
         // Since currentImages is a computed property, only access the preview image if necessary
         //if progress.step < previewIndices.count, previewIndices[progress.step] {
@@ -81,8 +85,7 @@ class Pipeline {
         numPreviews previewCount: Int = 5,
         guidanceScale: Float = 7.5,
         disableSafety: Bool = false,
-        progress: @escaping (StableDiffusionProgress) -> Void,
-        debug: Bool = false
+        progress: @escaping (StableDiffusionProgress) -> Void
     ) throws -> GenerationResult {
         let beginDate = Date()
         canceled = false
@@ -98,7 +101,6 @@ class Pipeline {
         config.disableSafety = disableSafety
         config.schedulerType = scheduler.asStableDiffusionScheduler()
         config.useDenoisedIntermediates = true
-        config.isDebug = debug
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025

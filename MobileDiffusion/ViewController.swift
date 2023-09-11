@@ -96,7 +96,7 @@ class ViewController: UIViewController {
             }
             do {
                 generation.delegate = self
-                generation.pipeline = try await loader.prepare(debug: isDebug)
+                generation.pipeline = try await loader.prepare()
                 self.vStatus.text = "Start"
             }  catch {
                 print("Could not load model, error: \(error)")
@@ -120,13 +120,10 @@ class ViewController: UIViewController {
             generation.state = .running(nil)
             do {
                 self.vImage.image = nil
-                generation.positivePrompt = vPrompt.text ?? "Dog"
+                generation.positivePrompt = (vPrompt.text?.isEmpty ?? true) ? "Dog" : vPrompt.text!
                 generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
-                let result = try await generation.generate(debug: isDebug)
+                let result = try await generation.generate()
                 generation.state = .complete(generation.positivePrompt, result.image, result.lastSeed, result.interval)
-                /*if let cgImage = generation.previewImage {
-                    self.vImage.image = UIImage(cgImage: cgImage)
-                }*/
                 self.vStatus.text = "Done"
             } catch {
                 generation.state = .failed(error)

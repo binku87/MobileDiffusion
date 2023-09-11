@@ -116,7 +116,7 @@ extension PipelineLoader {
         }
     }
     
-    func prepare(debug: Bool) async throws -> Pipeline {
+    func prepare() async throws -> Pipeline {
         do {
             do {
                 try FileManager.default.createDirectory(atPath: PipelineLoader.models.path, withIntermediateDirectories: true, attributes: nil)
@@ -126,7 +126,7 @@ extension PipelineLoader {
 
             try await download()
             try await unzip()
-            let pipeline = try await load(url: compiledURL, debug: debug)
+            let pipeline = try await load(url: compiledURL)
             return Pipeline(pipeline, maxSeed: maxSeed)
         } catch {
             state = .failed(error)
@@ -168,10 +168,10 @@ extension PipelineLoader {
         case other(String)
     }
 
-    func load(url: URL, debug: Bool) async throws -> StableDiffusionPipelineProtocol {
+    func load(url: URL) async throws -> StableDiffusionPipelineProtocol {
         let beginDate = Date()
         let configuration = MLModelConfiguration()
-        configuration.computeUnits = computeUnits
+        configuration.computeUnits = .cpuAndNeuralEngine
         let pipeline: StableDiffusionPipelineProtocol
         if model.isXL {
             if #available(macOS 14.0, iOS 17.0, *) {
@@ -188,9 +188,7 @@ extension PipelineLoader {
                                                        disableSafety: true,
                                                        reduceMemory: model.reduceMemory)
         }
-        if !debug {
-            try pipeline.loadResources()
-        }
+        try pipeline.loadResources()
         print("Pipeline loaded in \(Date().timeIntervalSince(beginDate))")
         state = .loaded
         return pipeline
