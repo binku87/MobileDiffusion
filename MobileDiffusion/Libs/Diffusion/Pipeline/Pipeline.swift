@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreML
-import StableDiffusion
 import Combine
 
 public struct StableDiffusionProgress {
@@ -21,11 +20,13 @@ public struct StableDiffusionProgress {
 
     init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
         self.progress = progress
-        if [0, 8, 15].contains(progress.step) {
+        self.currentImages = []
+
+        /*if [0, 8, 15].contains(progress.step) {
             self.currentImages = progress.currentImages
         } else {
             self.currentImages = []
-        }
+        }*/
 
         // Since currentImages is a computed property, only access the preview image if necessary
         //if progress.step < previewIndices.count, previewIndices[progress.step] {
@@ -99,7 +100,7 @@ class Pipeline {
         config.seed = theSeed
         config.guidanceScale = guidanceScale
         config.disableSafety = disableSafety
-        config.schedulerType = scheduler.asStableDiffusionScheduler()
+        config.schedulerType = .dpmSolverMultistepScheduler
         config.useDenoisedIntermediates = true
         if isXL {
             config.encoderScaleFactor = 0.13025

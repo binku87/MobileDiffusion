@@ -10,7 +10,6 @@
 import CoreML
 import Combine
 import ZIPFoundation
-import StableDiffusion
 
 class PipelineLoader {
     static let models = Settings.shared.applicationSupportURL().appendingPathComponent("hf-diffusion-models")
@@ -79,7 +78,7 @@ extension PipelineLoader {
 
 extension PipelineLoader {
     var url: URL {
-        return URL(string: "http://192.168.0.29:8000/samaritan-3d-cartoon-v2.zip")!
+        return URL(string: "http://192.168.0.29:8000/majicmixRealistic_v2.zip")!
         //return model.modelURL(for: variant)
         //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-1-4_split_einsum_compiled.zip")!
         //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip")!

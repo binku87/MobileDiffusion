@@ -9,7 +9,6 @@
 import Combine
 import SwiftUI
 import CoreML
-import StableDiffusion
 
 let DEFAULT_MODEL = ModelInfo.v2Base
 let DEFAULT_PROMPT = "Labrador in the style of Vermeer"
@@ -25,19 +24,19 @@ enum GenerationState {
 typealias ComputeUnits = MLComputeUnits
 
 /// Schedulers compatible with StableDiffusionPipeline. This is a local implementation of the StableDiffusionScheduler enum as a String represetation to allow for compliance with NSSecureCoding.
-public enum StableDiffusionScheduler: String {
+/*public enum StableDiffusionScheduler: String {
     /// Scheduler that uses a pseudo-linear multi-step (PLMS) method
     case pndmScheduler
     /// Scheduler that uses a second order DPM-Solver++ algorithm
     case dpmSolverMultistepScheduler
 
-    func asStableDiffusionScheduler() -> StableDiffusion.StableDiffusionScheduler {
+    func asStableDiffusionScheduler() -> StableDiffusionScheduler {
         switch self {
-        case .pndmScheduler: return StableDiffusion.StableDiffusionScheduler.pndmScheduler
-        case .dpmSolverMultistepScheduler: return StableDiffusion.StableDiffusionScheduler.dpmSolverMultistepScheduler
+        case .pndmScheduler: return StableDiffusionScheduler.pndmScheduler
+        case .dpmSolverMultistepScheduler: return StableDiffusionScheduler.dpmSolverMultistepScheduler
         }
     }
-}
+}*/
 
 class GenerationContext: ObservableObject {
     let scheduler = StableDiffusionScheduler.dpmSolverMultistepScheduler
