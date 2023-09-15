@@ -9,6 +9,7 @@
 import Combine
 import SwiftUI
 import CoreML
+import StableDiffusion
 
 let DEFAULT_MODEL = ModelInfo.v2Base
 let DEFAULT_PROMPT = "Labrador in the style of Vermeer"

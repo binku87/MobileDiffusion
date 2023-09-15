@@ -10,6 +10,7 @@
 import CoreML
 import Combine
 import ZIPFoundation
+import StableDiffusion
 
 class PipelineLoader {
     static let models = Settings.shared.applicationSupportURL().appendingPathComponent("hf-diffusion-models")

@@ -9,6 +9,7 @@
 import Foundation
 import CoreML
 import Combine
+import StableDiffusion
 
 public struct StableDiffusionProgress {
     var progress: StableDiffusionPipeline.Progress

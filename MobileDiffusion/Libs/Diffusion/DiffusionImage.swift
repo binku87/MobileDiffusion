@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreTransferable
+import StableDiffusion
 
 /// Tracking for a `DiffusionImage` generation state.
 enum DiffusionImageState {

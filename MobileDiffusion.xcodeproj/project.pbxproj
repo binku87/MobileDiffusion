@@ -7,33 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18353FB62AB003860027938C /* DPMSolverMultistepScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353F9D2AB003860027938C /* DPMSolverMultistepScheduler.swift */; };
-		18353FB72AB003860027938C /* TextEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353F9E2AB003860027938C /* TextEncoder.swift */; };
-		18353FB82AB003860027938C /* ResourceManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353F9F2AB003860027938C /* ResourceManaging.swift */; };
-		18353FB92AB003860027938C /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA02AB003860027938C /* Decoder.swift */; };
-		18353FBA2AB003860027938C /* ControlNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA12AB003860027938C /* ControlNet.swift */; };
-		18353FBB2AB003860027938C /* SafetyChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA22AB003860027938C /* SafetyChecker.swift */; };
-		18353FBC2AB003860027938C /* TorchRandomSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA32AB003860027938C /* TorchRandomSource.swift */; };
-		18353FBD2AB003860027938C /* CGImage+vImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA42AB003860027938C /* CGImage+vImage.swift */; };
-		18353FBE2AB003860027938C /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA52AB003860027938C /* Encoder.swift */; };
-		18353FBF2AB003860027938C /* Unet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA62AB003860027938C /* Unet.swift */; };
-		18353FC02AB003860027938C /* SampleTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA72AB003860027938C /* SampleTimer.swift */; };
-		18353FC12AB003860027938C /* RandomSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA82AB003860027938C /* RandomSource.swift */; };
-		18353FC22AB003860027938C /* StableDiffusionXLPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FA92AB003860027938C /* StableDiffusionXLPipeline.swift */; };
-		18353FC32AB003860027938C /* NumPyRandomSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAA2AB003860027938C /* NumPyRandomSource.swift */; };
-		18353FC42AB003860027938C /* StableDiffusionPipeline+Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAB2AB003860027938C /* StableDiffusionPipeline+Resources.swift */; };
-		18353FC52AB003860027938C /* MultilingualTextEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAC2AB003860027938C /* MultilingualTextEncoder.swift */; };
-		18353FC62AB003860027938C /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAD2AB003860027938C /* Scheduler.swift */; };
-		18353FC72AB003860027938C /* StableDiffusionPipeline.Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAE2AB003860027938C /* StableDiffusionPipeline.Configuration.swift */; };
-		18353FC82AB003860027938C /* ManagedMLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FAF2AB003860027938C /* ManagedMLModel.swift */; };
-		18353FC92AB003860027938C /* TextEncoderXL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB02AB003860027938C /* TextEncoderXL.swift */; };
-		18353FCA2AB003860027938C /* StableDiffusionXL+Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB12AB003860027938C /* StableDiffusionXL+Resources.swift */; };
-		18353FCB2AB003860027938C /* StableDiffusionPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB22AB003860027938C /* StableDiffusionPipeline.swift */; };
-		18353FCC2AB003860027938C /* BPETokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB42AB003860027938C /* BPETokenizer.swift */; };
-		18353FCD2AB003860027938C /* BPETokenizer+Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB52AB003860027938C /* BPETokenizer+Reading.swift */; };
 		18353FD52AB004A50027938C /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 18353FD42AB004A50027938C /* ArgumentParser */; };
 		18353FFB2AB345920027938C /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FF92AB345920027938C /* ImageCell.swift */; };
 		18353FFC2AB345920027938C /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18353FFA2AB345920027938C /* ImageCell.xib */; };
+		18353FFF2AB3EE540027938C /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 18353FFE2AB3EE540027938C /* StableDiffusion */; };
 		187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57362AA5E18B00C41ABF /* AppDelegate.swift */; };
 		187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57382AA5E18B00C41ABF /* SceneDelegate.swift */; };
 		187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E573A2AA5E18B00C41ABF /* ViewController.swift */; };
@@ -53,37 +30,8 @@
 
 /* Begin PBXFileReference section */
 		0C9DFBE3A1E39CA5F3B632D3 /* Pods-MobileDiffusion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileDiffusion.debug.xcconfig"; path = "Target Support Files/Pods-MobileDiffusion/Pods-MobileDiffusion.debug.xcconfig"; sourceTree = "<group>"; };
-		18353F9D2AB003860027938C /* DPMSolverMultistepScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPMSolverMultistepScheduler.swift; sourceTree = "<group>"; };
-		18353F9E2AB003860027938C /* TextEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEncoder.swift; sourceTree = "<group>"; };
-		18353F9F2AB003860027938C /* ResourceManaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceManaging.swift; sourceTree = "<group>"; };
-		18353FA02AB003860027938C /* Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
-		18353FA12AB003860027938C /* ControlNet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlNet.swift; sourceTree = "<group>"; };
-		18353FA22AB003860027938C /* SafetyChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafetyChecker.swift; sourceTree = "<group>"; };
-		18353FA32AB003860027938C /* TorchRandomSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TorchRandomSource.swift; sourceTree = "<group>"; };
-		18353FA42AB003860027938C /* CGImage+vImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+vImage.swift"; sourceTree = "<group>"; };
-		18353FA52AB003860027938C /* Encoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
-		18353FA62AB003860027938C /* Unet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Unet.swift; sourceTree = "<group>"; };
-		18353FA72AB003860027938C /* SampleTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTimer.swift; sourceTree = "<group>"; };
-		18353FA82AB003860027938C /* RandomSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomSource.swift; sourceTree = "<group>"; };
-		18353FA92AB003860027938C /* StableDiffusionXLPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StableDiffusionXLPipeline.swift; sourceTree = "<group>"; };
-		18353FAA2AB003860027938C /* NumPyRandomSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumPyRandomSource.swift; sourceTree = "<group>"; };
-		18353FAB2AB003860027938C /* StableDiffusionPipeline+Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StableDiffusionPipeline+Resources.swift"; sourceTree = "<group>"; };
-		18353FAC2AB003860027938C /* MultilingualTextEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultilingualTextEncoder.swift; sourceTree = "<group>"; };
-		18353FAD2AB003860027938C /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
-		18353FAE2AB003860027938C /* StableDiffusionPipeline.Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StableDiffusionPipeline.Configuration.swift; sourceTree = "<group>"; };
-		18353FAF2AB003860027938C /* ManagedMLModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedMLModel.swift; sourceTree = "<group>"; };
-		18353FB02AB003860027938C /* TextEncoderXL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEncoderXL.swift; sourceTree = "<group>"; };
-		18353FB12AB003860027938C /* StableDiffusionXL+Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StableDiffusionXL+Resources.swift"; sourceTree = "<group>"; };
-		18353FB22AB003860027938C /* StableDiffusionPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StableDiffusionPipeline.swift; sourceTree = "<group>"; };
-		18353FB42AB003860027938C /* BPETokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BPETokenizer.swift; sourceTree = "<group>"; };
-		18353FB52AB003860027938C /* BPETokenizer+Reading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BPETokenizer+Reading.swift"; sourceTree = "<group>"; };
 		18353FF92AB345920027938C /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		18353FFA2AB345920027938C /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
-		18663D982AADFF290051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
-		18663D992AADFF440051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
-		18663D9A2AADFF6F0051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
-		18663D9B2AADFFA10051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
-		18663D9C2AADFFBC0051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
 		187E57332AA5E18B00C41ABF /* MobileDiffusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileDiffusion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187E57362AA5E18B00C41ABF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		187E57382AA5E18B00C41ABF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18353FD52AB004A50027938C /* ArgumentParser in Frameworks */,
+				18353FFF2AB3EE540027938C /* StableDiffusion in Frameworks */,
 				B081F0882172531F4D67164A /* Pods_MobileDiffusion.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,53 +67,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		18353F9B2AB003860027938C /* StableDiffusion */ = {
-			isa = PBXGroup;
-			children = (
-				18353F9C2AB003860027938C /* pipeline */,
-				18353FB32AB003860027938C /* tokenizer */,
-			);
-			path = StableDiffusion;
-			sourceTree = "<group>";
-		};
-		18353F9C2AB003860027938C /* pipeline */ = {
-			isa = PBXGroup;
-			children = (
-				18353F9D2AB003860027938C /* DPMSolverMultistepScheduler.swift */,
-				18353F9E2AB003860027938C /* TextEncoder.swift */,
-				18353F9F2AB003860027938C /* ResourceManaging.swift */,
-				18353FA02AB003860027938C /* Decoder.swift */,
-				18353FA12AB003860027938C /* ControlNet.swift */,
-				18353FA22AB003860027938C /* SafetyChecker.swift */,
-				18353FA32AB003860027938C /* TorchRandomSource.swift */,
-				18353FA42AB003860027938C /* CGImage+vImage.swift */,
-				18353FA52AB003860027938C /* Encoder.swift */,
-				18353FA62AB003860027938C /* Unet.swift */,
-				18353FA72AB003860027938C /* SampleTimer.swift */,
-				18353FA82AB003860027938C /* RandomSource.swift */,
-				18353FA92AB003860027938C /* StableDiffusionXLPipeline.swift */,
-				18353FAA2AB003860027938C /* NumPyRandomSource.swift */,
-				18353FAB2AB003860027938C /* StableDiffusionPipeline+Resources.swift */,
-				18353FAC2AB003860027938C /* MultilingualTextEncoder.swift */,
-				18353FAD2AB003860027938C /* Scheduler.swift */,
-				18353FAE2AB003860027938C /* StableDiffusionPipeline.Configuration.swift */,
-				18353FAF2AB003860027938C /* ManagedMLModel.swift */,
-				18353FB02AB003860027938C /* TextEncoderXL.swift */,
-				18353FB12AB003860027938C /* StableDiffusionXL+Resources.swift */,
-				18353FB22AB003860027938C /* StableDiffusionPipeline.swift */,
-			);
-			path = pipeline;
-			sourceTree = "<group>";
-		};
-		18353FB32AB003860027938C /* tokenizer */ = {
-			isa = PBXGroup;
-			children = (
-				18353FB42AB003860027938C /* BPETokenizer.swift */,
-				18353FB52AB003860027938C /* BPETokenizer+Reading.swift */,
-			);
-			path = tokenizer;
-			sourceTree = "<group>";
-		};
 		18353FF82AB3457A0027938C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,22 +76,9 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		18663D972AADFF290051DAD2 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				18663D982AADFF290051DAD2 /* ml-stable-diffusion-me */,
-				18663D992AADFF440051DAD2 /* ml-stable-diffusion-me */,
-				18663D9A2AADFF6F0051DAD2 /* ml-stable-diffusion-me */,
-				18663D9B2AADFFA10051DAD2 /* ml-stable-diffusion-me */,
-				18663D9C2AADFFBC0051DAD2 /* ml-stable-diffusion-me */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		187E572A2AA5E18B00C41ABF = {
 			isa = PBXGroup;
 			children = (
-				18663D972AADFF290051DAD2 /* Packages */,
 				187E57352AA5E18B00C41ABF /* MobileDiffusion */,
 				187E57342AA5E18B00C41ABF /* Products */,
 				35F31C9CC6B0C7BFDE7330F3 /* Pods */,
@@ -225,7 +114,6 @@
 		187E574A2AA5E1C700C41ABF /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				18353F9B2AB003860027938C /* StableDiffusion */,
 				187E574B2AA5E1D300C41ABF /* Diffusion */,
 				187E575F2AA6146D00C41ABF /* DifussionImage+iOS.swift */,
 			);
@@ -291,6 +179,7 @@
 			name = MobileDiffusion;
 			packageProductDependencies = (
 				18353FD42AB004A50027938C /* ArgumentParser */,
+				18353FFE2AB3EE540027938C /* StableDiffusion */,
 			);
 			productName = MobileDiffusion;
 			productReference = 187E57332AA5E18B00C41ABF /* MobileDiffusion.app */;
@@ -322,6 +211,7 @@
 			mainGroup = 187E572A2AA5E18B00C41ABF;
 			packageReferences = (
 				18353FD32AB004A50027938C /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				18353FFD2AB3EE540027938C /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */,
 			);
 			productRefGroup = 187E57342AA5E18B00C41ABF /* Products */;
 			projectDirPath = "";
@@ -393,42 +283,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18353FBF2AB003860027938C /* Unet.swift in Sources */,
-				18353FC62AB003860027938C /* Scheduler.swift in Sources */,
-				18353FB72AB003860027938C /* TextEncoder.swift in Sources */,
-				18353FC72AB003860027938C /* StableDiffusionPipeline.Configuration.swift in Sources */,
-				18353FBB2AB003860027938C /* SafetyChecker.swift in Sources */,
 				187E57592AA60B2800C41ABF /* Pipeline.swift in Sources */,
 				187E57552AA60B2800C41ABF /* ModelInfo.swift in Sources */,
-				18353FCD2AB003860027938C /* BPETokenizer+Reading.swift in Sources */,
-				18353FCC2AB003860027938C /* BPETokenizer.swift in Sources */,
-				18353FC02AB003860027938C /* SampleTimer.swift in Sources */,
-				18353FC22AB003860027938C /* StableDiffusionXLPipeline.swift in Sources */,
-				18353FC92AB003860027938C /* TextEncoderXL.swift in Sources */,
-				18353FBA2AB003860027938C /* ControlNet.swift in Sources */,
-				18353FB82AB003860027938C /* ResourceManaging.swift in Sources */,
 				187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */,
 				187E57562AA60B2800C41ABF /* Downloader.swift in Sources */,
 				187E575A2AA60B2800C41ABF /* PipelineLoader.swift in Sources */,
 				187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */,
 				187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */,
 				187E57542AA60B2800C41ABF /* State.swift in Sources */,
-				18353FBE2AB003860027938C /* Encoder.swift in Sources */,
-				18353FC82AB003860027938C /* ManagedMLModel.swift in Sources */,
-				18353FBC2AB003860027938C /* TorchRandomSource.swift in Sources */,
-				18353FCB2AB003860027938C /* StableDiffusionPipeline.swift in Sources */,
 				187E57602AA6146D00C41ABF /* DifussionImage+iOS.swift in Sources */,
-				18353FC42AB003860027938C /* StableDiffusionPipeline+Resources.swift in Sources */,
 				187E57572AA60B2800C41ABF /* DiffusionImage.swift in Sources */,
-				18353FCA2AB003860027938C /* StableDiffusionXL+Resources.swift in Sources */,
-				18353FB62AB003860027938C /* DPMSolverMultistepScheduler.swift in Sources */,
 				18353FFB2AB345920027938C /* ImageCell.swift in Sources */,
-				18353FC32AB003860027938C /* NumPyRandomSource.swift in Sources */,
-				18353FBD2AB003860027938C /* CGImage+vImage.swift in Sources */,
-				18353FB92AB003860027938C /* Decoder.swift in Sources */,
-				18353FC12AB003860027938C /* RandomSource.swift in Sources */,
 				187E57582AA60B2800C41ABF /* Utils.swift in Sources */,
-				18353FC52AB003860027938C /* MultilingualTextEncoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,6 +535,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		18353FFD2AB3EE540027938C /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/ml-stable-diffusion";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -676,6 +550,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 18353FD32AB004A50027938C /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		18353FFE2AB3EE540027938C /* StableDiffusion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18353FFD2AB3EE540027938C /* XCRemoteSwiftPackageReference "ml-stable-diffusion" */;
+			productName = StableDiffusion;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
