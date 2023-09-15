@@ -28,6 +28,39 @@ func calcMemory() -> Double {
     }
 }
 
+protocol ReusableView {
+    static var reuseIdentifier: String { get }
+}
+
+extension ReusableView {
+    static var reuseIdentifier: String {
+        return "\(self)"
+    }
+}
+
+extension UITableViewCell: ReusableView {}
+
+protocol NibLoadable: ReusableView {
+    static var nib: UINib { get }
+}
+
+extension NibLoadable {
+    static var nib: UINib {
+        return UINib(nibName: reuseIdentifier, bundle: nil)
+    }
+}
+
+extension UITableView {
+    func registerNibCell<T: NibLoadable>(ofType: T.Type) {
+        self.register(T.nib, forCellReuseIdentifier: T.reuseIdentifier)
+    }
+    
+    func dequeueRegisteredCell<T: ReusableView>(oftype: T.Type, at indexPath: IndexPath) -> T {
+        let cell = dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath)
+        return cell as! T //Should be safe to force unwrap since reuse ID is derived from class name
+    }
+}
+
 extension Notification.Name {
     static let MemoryDidWarning = NSNotification.Name("MemoryDidWarning")
     static let AppWillTerminate = NSNotification.Name("AppWillTerminate")
@@ -46,12 +79,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var vPrompt: UITextField!
     @IBOutlet weak var vMemory: UILabel!
     @IBOutlet weak var vAction: UIButton!
-
+    @IBOutlet weak var vTable: UITableView!
+    
     let model = ModelInfo.v21Base
     var generation = GenerationContext()
     var stateSubscriber: Cancellable?
     var imageTask: Task<Void, Never>? = nil
     var i = 0
+    var results: [GenerationResult] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -73,6 +109,8 @@ class ViewController: UIViewController {
                 //print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
             }
         }
+        vTable.registerNibCell(ofType: ImageCell.self)
+        vTable.reloadData()
         loadModel()
     }
 
@@ -121,11 +159,12 @@ class ViewController: UIViewController {
                 self.vImage.image = nil
                 generation.positivePrompt = (vPrompt.text?.isEmpty ?? true) ? "Dog" : vPrompt.text!
                 generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
-                let result = try await generation.generate()
-                if let cgImage =  result.image {
+                self.results.append(contentsOf: try await generation.generate())
+                if let cgImage =  results[0].image {
                     self.vImage.image = UIImage(cgImage: cgImage)
                 }
-                generation.state = .complete(generation.positivePrompt, result.image, result.lastSeed, result.interval)
+                self.vTable.reloadData()
+                generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
                 self.vStatus.text = "Done"
             } catch {
                 generation.state = .failed(error)
@@ -179,6 +218,31 @@ class ViewController: UIViewController {
         let freeMemoryMB = Double(freeMemory) / 1024 / 1024
 
         return (totalMemoryMB, freeMemoryMB)
+    }
+    
+    
+}
+
+extension ViewController: UITableViewDataSource, UITableViewDelegate{
+    func numberOfSections(in tableView: UITableView) ->Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        return results.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = vTable.dequeueRegisteredCell(oftype: ImageCell.self, at: indexPath)
+        cell.selectionStyle = .none
+        if let cgImage = results[indexPath.row].image {
+            cell.setData(image:  UIImage(cgImage: cgImage))
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UIScreen.main.bounds.width - 20
     }
 }
 

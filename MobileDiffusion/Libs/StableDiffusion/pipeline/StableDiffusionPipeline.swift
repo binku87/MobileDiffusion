@@ -233,17 +233,6 @@ public struct StableDiffusionPipeline: StableDiffusionPipelineProtocol {
         }
 
         var t = Date()
-        /*print("service=diffusion action=preload_model start=\(t)")
-        try? unet.preloadResources()
-        unet.unloadResources()
-        try? decoder.preloadResources()
-        decoder.unloadResources()
-        print("service=diffusion action=preload_model t=\(Date().timeIntervalSince(t))")*/
-        // Generate random latent samples from specified seed
-        //executeWithTimeout(timeout: 8, retry: true) {
-            //return true
-        //}
-        
         t = Date()
         print("service=diffusion action=generateLatentSamples start=\(t)")
         var latents: [MLShapedArray<Float32>] = try generateLatentSamples(configuration: config, scheduler: scheduler[0])
@@ -285,17 +274,6 @@ public struct StableDiffusionPipeline: StableDiffusionPipelineProtocol {
             )
 
             var tt = Date()
-            //try? unet.unloadResources()
-            //print("service=diffusion action=prewarmResources step=\(step)")
-            /*if config.isDebug {
-                try? unet.preloadResources()
-            } else {
-                try? unet.prewarmResources()
-            }*/
-            //print("service=diffusion action=prewarmResources t=\(Date().timeIntervalSince(tt))")
-            // Predict noise residuals from latent samples
-            // and current time step conditioned on hidden states
-            //tt = Date()
             print("service=diffusion action=predictNoise step=\(step)")
             var noise = try unet.predictNoise(
                 latents: latentUnetInput,
@@ -345,74 +323,7 @@ public struct StableDiffusionPipeline: StableDiffusionPipelineProtocol {
         return try decodeToImages(denoisedLatents, configuration: config)
     }
 
-    func executeWithTimeout(timeout: TimeInterval, retry: Bool, block: @escaping(() -> Bool)) {
-        let semaphore = DispatchSemaphore(value: 0)
-        var success = false
-        
-        DispatchQueue.global().async {
-            success = block()
-            semaphore.signal()
-        }
-        
-        if semaphore.wait(timeout: .now() + timeout) == .timedOut {
-            print("Operation timed out")
-            if retry {
-                print("Retrying...")
-                executeWithTimeout(timeout: timeout, retry: retry, block: block)
-            }
-        } else {
-            if success {
-                print("Operation succeeded")
-            } else {
-                print("Operation failed")
-                if retry {
-                    print("Retrying...")
-                    executeWithTimeout(timeout: timeout, retry: retry, block: block)
-                }
-            }
-        }
-    }
-
-    func getSystemMemoryInfo() -> Double {
-        var totalMemory: UInt64 = 0
-        var freeMemory: vm_size_t = 0
-        
-        // 获取总内存大小
-        var mib: [Int32] = [CTL_HW, HW_MEMSIZE]
-        var length = MemoryLayout<UInt64>.size
-        sysctl(&mib, 2, &totalMemory, &length, nil, 0)
-        
-        // 获取可用内存大小
-        var page_size: vm_size_t = 0
-        var vm_stats = vm_statistics64()
-        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size)
-        host_page_size(mach_host_self(), &page_size)
-        
-        withUnsafeMutablePointer(to: &vm_stats) { (vmStatsPointer) in
-            _ = withUnsafeMutablePointer(to: &count) { (countPointer) in
-                vmStatsPointer.withMemoryRebound(to: integer_t.self, capacity: 1) { reboundPointer in
-                    host_statistics64(
-                        mach_host_self(),
-                        HOST_VM_INFO,
-                        reboundPointer,
-                        countPointer
-                    )
-                }
-            }
-        }
-        
-        freeMemory = vm_size_t(vm_stats.free_count) * page_size
-
-        // 转换为MB
-        let freeMemoryMB = Double(freeMemory) / 1024 / 1024
-        
-        return freeMemoryMB
-    }
-
     func generateLatentSamples(configuration config: Configuration, scheduler: Scheduler) throws -> [MLShapedArray<Float32>] {
-        /*if config.isDebug {
-            try? unet.preloadResources()
-        }*/
         var sampleShape = unet.latentSampleShape
         sampleShape[0] = 1
         
@@ -433,7 +344,6 @@ public struct StableDiffusionPipeline: StableDiffusionPipelineProtocol {
     }
 
     public func decodeToImages(_ latents: [MLShapedArray<Float32>], configuration config: Configuration) throws -> [CGImage?] {
-        //unet.unloadResources()
         let t = Date()
         print("service=diffusion action=decodeToImages")
         let images = try decoder.decode(latents, scaleFactor: config.decoderScaleFactor)

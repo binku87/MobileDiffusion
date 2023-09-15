@@ -87,7 +87,7 @@ class Pipeline {
         guidanceScale: Float = 7.5,
         disableSafety: Bool = false,
         progress: @escaping (StableDiffusionProgress) -> Void
-    ) throws -> GenerationResult {
+    ) throws -> [GenerationResult] {
         let beginDate = Date()
         canceled = false
         let theSeed = seed > 0 ? seed : UInt32.random(in: 1...maxSeed)
@@ -102,6 +102,7 @@ class Pipeline {
         config.disableSafety = disableSafety
         config.schedulerType = .dpmSolverMultistepScheduler
         config.useDenoisedIntermediates = true
+        config.imageCount = 4
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025
@@ -124,10 +125,11 @@ class Pipeline {
         }
         let interval = Date().timeIntervalSince(beginDate)
         print("Got images: \(images) in \(interval)")
-        
-        // Unwrap the 1 image we asked for, nil means safety checker triggered
-        let image = images.compactMap({ $0 }).first
-        return GenerationResult(image: image, lastSeed: theSeed, interval: interval, userCanceled: canceled, itsPerSecond: 1.0/sampleTimer.median)
+        var results: [GenerationResult] = []
+        images.forEach { image in
+            results.append(GenerationResult(image: image, lastSeed: theSeed, interval: interval, userCanceled: canceled, itsPerSecond: 1.0/sampleTimer.median))
+        }
+        return results
     }
 
     func handleProgress(_ progress: StableDiffusionProgress, sampleTimer: SampleTimer) {

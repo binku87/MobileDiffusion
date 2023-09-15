@@ -32,6 +32,8 @@
 		18353FCC2AB003860027938C /* BPETokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB42AB003860027938C /* BPETokenizer.swift */; };
 		18353FCD2AB003860027938C /* BPETokenizer+Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FB52AB003860027938C /* BPETokenizer+Reading.swift */; };
 		18353FD52AB004A50027938C /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 18353FD42AB004A50027938C /* ArgumentParser */; };
+		18353FFB2AB345920027938C /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FF92AB345920027938C /* ImageCell.swift */; };
+		18353FFC2AB345920027938C /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18353FFA2AB345920027938C /* ImageCell.xib */; };
 		187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57362AA5E18B00C41ABF /* AppDelegate.swift */; };
 		187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57382AA5E18B00C41ABF /* SceneDelegate.swift */; };
 		187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E573A2AA5E18B00C41ABF /* ViewController.swift */; };
@@ -75,6 +77,8 @@
 		18353FB22AB003860027938C /* StableDiffusionPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StableDiffusionPipeline.swift; sourceTree = "<group>"; };
 		18353FB42AB003860027938C /* BPETokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BPETokenizer.swift; sourceTree = "<group>"; };
 		18353FB52AB003860027938C /* BPETokenizer+Reading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BPETokenizer+Reading.swift"; sourceTree = "<group>"; };
+		18353FF92AB345920027938C /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		18353FFA2AB345920027938C /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		18663D982AADFF290051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
 		18663D992AADFF440051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
 		18663D9A2AADFF6F0051DAD2 /* ml-stable-diffusion-me */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ml-stable-diffusion-me"; path = "../ml-stable-diffusion-me"; sourceTree = "<group>"; };
@@ -161,6 +165,15 @@
 			path = tokenizer;
 			sourceTree = "<group>";
 		};
+		18353FF82AB3457A0027938C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				18353FF92AB345920027938C /* ImageCell.swift */,
+				18353FFA2AB345920027938C /* ImageCell.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		18663D972AADFF290051DAD2 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +208,7 @@
 		187E57352AA5E18B00C41ABF /* MobileDiffusion */ = {
 			isa = PBXGroup;
 			children = (
+				18353FF82AB3457A0027938C /* Views */,
 				187E575E2AA60DDD00C41ABF /* MobileDiffusion.entitlements */,
 				187E574A2AA5E1C700C41ABF /* Libs */,
 				187E57362AA5E18B00C41ABF /* AppDelegate.swift */,
@@ -324,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				187E57432AA5E18C00C41ABF /* LaunchScreen.storyboard in Resources */,
+				18353FFC2AB345920027938C /* ImageCell.xib in Resources */,
 				187E57402AA5E18C00C41ABF /* Assets.xcassets in Resources */,
 				187E573E2AA5E18B00C41ABF /* Main.storyboard in Resources */,
 			);
@@ -407,6 +422,7 @@
 				187E57572AA60B2800C41ABF /* DiffusionImage.swift in Sources */,
 				18353FCA2AB003860027938C /* StableDiffusionXL+Resources.swift in Sources */,
 				18353FB62AB003860027938C /* DPMSolverMultistepScheduler.swift in Sources */,
+				18353FFB2AB345920027938C /* ImageCell.swift in Sources */,
 				18353FC32AB003860027938C /* NumPyRandomSource.swift in Sources */,
 				18353FBD2AB003860027938C /* CGImage+vImage.swift in Sources */,
 				18353FB92AB003860027938C /* Decoder.swift in Sources */,
