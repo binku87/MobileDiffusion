@@ -36,13 +36,6 @@ public struct StableDiffusionProgress {
         //}
         //}
     }
-    
-    var image: CGImage? {
-        if let newImage = self.currentImages.first, newImage != nil {
-            return newImage
-        }
-        return nil
-    }
 }
 
 struct GenerationResult {
@@ -98,12 +91,12 @@ class Pipeline {
         var config = StableDiffusionPipeline.Configuration(prompt: prompt)
         config.negativePrompt = negativePrompt
         config.stepCount = stepCount
-        config.seed = theSeed
+        config.seed = 3720662312 //theSeed
         config.guidanceScale = guidanceScale
         config.disableSafety = disableSafety
         config.schedulerType = .dpmSolverMultistepScheduler
         config.useDenoisedIntermediates = true
-        config.imageCount = 4
+        config.imageCount = 1
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025

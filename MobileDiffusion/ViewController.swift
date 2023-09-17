@@ -10,69 +10,6 @@ import Combine
 import Darwin
 import Foundation
 
-func calcMemory() -> Double {
-    var info = mach_task_basic_info()
-    var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-
-    let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
-        $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-            task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-        }
-    }
-
-    if kerr == KERN_SUCCESS {
-        let usedMB = Double(info.resident_size) / 1024.0 / 1024.0
-        return usedMB
-    } else {
-        return 0
-    }
-}
-
-protocol ReusableView {
-    static var reuseIdentifier: String { get }
-}
-
-extension ReusableView {
-    static var reuseIdentifier: String {
-        return "\(self)"
-    }
-}
-
-extension UITableViewCell: ReusableView {}
-
-protocol NibLoadable: ReusableView {
-    static var nib: UINib { get }
-}
-
-extension NibLoadable {
-    static var nib: UINib {
-        return UINib(nibName: reuseIdentifier, bundle: nil)
-    }
-}
-
-extension UITableView {
-    func registerNibCell<T: NibLoadable>(ofType: T.Type) {
-        self.register(T.nib, forCellReuseIdentifier: T.reuseIdentifier)
-    }
-    
-    func dequeueRegisteredCell<T: ReusableView>(oftype: T.Type, at indexPath: IndexPath) -> T {
-        let cell = dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath)
-        return cell as! T //Should be safe to force unwrap since reuse ID is derived from class name
-    }
-}
-
-extension Notification.Name {
-    static let MemoryDidWarning = NSNotification.Name("MemoryDidWarning")
-    static let AppWillTerminate = NSNotification.Name("AppWillTerminate")
-}
-
-extension NotificationCenter {
-    func reinstall(observer: NSObject, name: Notification.Name, selector: Selector) {
-        NotificationCenter.default.removeObserver(observer, name: name, object: nil)
-        NotificationCenter.default.addObserver(observer, selector: selector, name: name, object: nil)
-    }
-}
-
 class ViewController: UIViewController {
     @IBOutlet weak var vStatus: UILabel!
     @IBOutlet weak var vImage: UIImageView!
@@ -81,146 +18,37 @@ class ViewController: UIViewController {
     @IBOutlet weak var vAction: UIButton!
     @IBOutlet weak var vTable: UITableView!
     
-    let model = ModelInfo.v21Base
-    var generation = GenerationContext()
-    var stateSubscriber: Cancellable?
-    var imageTask: Task<Void, Never>? = nil
-    var i = 0
+    var manager: DiffusionManager!
     var results: [GenerationResult] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        NotificationCenter.default.reinstall(observer: self, name: .AppWillTerminate, selector: #selector(self.cancelImageTask))
-        NotificationCenter.default.reinstall(observer: self, name: .MemoryDidWarning, selector: #selector(self.cancelImageTask))
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            DispatchQueue.main.async {
-                self.i += 1
-                let (total, available) = self.getSystemMemoryInfo()
-                /*if available < 20 {
-                    switch self.generation.state {
-                    case .startup:
-                        break
-                    default:
-                        self.cancelImageTask()
-                    }
-                }*/
-                self.vMemory.text = "时间=\(self.i)\n总共=\(Int(total))\n可用=\(Int(available))\nAPP占用=\(Int(calcMemory()))\nAPP可用=\(Int(os_proc_available_memory() / 1024 / 1024))"
-                //print("service=diffusion 时间=\(self.i) 总共=\(Int(total)) 可用=\(Int(available)) APP占用=\(Int(calcMemory())) APP可用=\(Int(os_proc_available_memory() / 1024 / 1024))")
-            }
-        }
+        self.manager = DiffusionManager(delegate: self)
+        self.manager.setup()
         vTable.registerNibCell(ofType: ImageCell.self)
         vTable.reloadData()
-        loadModel()
-    }
-
-    func loadModel() {
-        Task.init {
-            let loader = PipelineLoader(model: model)
-            stateSubscriber = loader.statePublisher.sink { state in
-                DispatchQueue.main.async {
-                    switch state {
-                    case .downloading(let progress):
-                        self.vStatus.text = "Downloading (\(progress)"
-                    case .uncompressing:
-                        self.vStatus.text = "Uncompressing"
-                    case .readyOnDisk:
-                        self.vStatus.text = "Loading"
-                    default:
-                        break
-                    }
-                }
-            }
-            do {
-                generation.delegate = self
-                generation.pipeline = try await loader.prepare()
-                self.vStatus.text = "Start"
-            }  catch {
-                print("Could not load model, error: \(error)")
-            }
-        }
     }
 
     @IBAction func tapGenerate() {
         vPrompt.resignFirstResponder()
-        if case .running = generation.state {
+        if manager.isCreating {
             self.vAction.setTitle("生成", for: .normal)
-            generation.cancelGeneration()
-            imageTask?.cancel()
-            generation.state = .userCanceled
-            return
-        }
-        self.i = 0
-        self.vAction.setTitle("取消", for: .normal)
-        imageTask = Task {
-            self.vStatus.text = "Generating"
-            generation.state = .running(nil)
-            do {
-                self.vImage.image = nil
-                generation.positivePrompt = (vPrompt.text?.isEmpty ?? true) ? "Dog" : vPrompt.text!
-                generation.negativePrompt = "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark,badhandv4,ng_deepnegative_v1_75t"
-                self.results.append(contentsOf: try await generation.generate())
-                if let cgImage =  results[0].image {
-                    self.vImage.image = UIImage(cgImage: cgImage)
-                }
-                self.vTable.reloadData()
-                generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
-                self.vStatus.text = "Done"
-            } catch {
-                generation.state = .failed(error)
-                self.vStatus.text = "Error: \(error)"
+            manager.cancelCreateImageFromText()
+        } else {
+            var config = DiffusionImageConfigure()
+            config.steps = 25
+            config.numOfImages = 2
+            config.positivePrompt = "Dog"
+            config.negativePrompt = ""
+            let err = manager.createImageFromText(configure: config)
+            if err != nil {
+                print(err!.message ?? "Unknown error")
+            } else {
+                self.vAction.setTitle("取消", for: .normal)
             }
         }
     }
-
-    @objc @IBAction func cancelImageTask() {
-        //print("service=diffusion action=cancel")
-        //if calcMemory() > 1500 || Int(calcMemory() * 1024 * 1024) > os_proc_available_memory() {
-        let (_, free) = getSystemMemoryInfo()
-        if free < 60 {
-            //self.vStatus.text = "Cancelled"
-            //(generation.pipeline?.pipeline as? StableDiffusionPipeline)?.unloadUnetResources()
-        }
-    }
-
-    func getSystemMemoryInfo() -> (totalMemoryMB: Double, freeMemoryMB: Double) {
-        var totalMemory: UInt64 = 0
-        var freeMemory: vm_size_t = 0
-
-        // 获取总内存大小
-        var mib: [Int32] = [CTL_HW, HW_MEMSIZE]
-        var length = MemoryLayout<UInt64>.size
-        sysctl(&mib, 2, &totalMemory, &length, nil, 0)
-
-        // 获取可用内存大小
-        var page_size: vm_size_t = 0
-        var vm_stats = vm_statistics64()
-        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size)
-        host_page_size(mach_host_self(), &page_size)
-
-        withUnsafeMutablePointer(to: &vm_stats) { (vmStatsPointer) in
-            _ = withUnsafeMutablePointer(to: &count) { (countPointer) in
-                vmStatsPointer.withMemoryRebound(to: integer_t.self, capacity: 1) { reboundPointer in
-                    host_statistics64(
-                        mach_host_self(),
-                        HOST_VM_INFO,
-                        reboundPointer,
-                        countPointer
-                    )
-                }
-            }
-        }
-
-        freeMemory = vm_size_t(vm_stats.free_count) * page_size
-
-        // 转换为MB
-        let totalMemoryMB = Double(totalMemory) / 1024 / 1024
-        let freeMemoryMB = Double(freeMemory) / 1024 / 1024
-
-        return (totalMemoryMB, freeMemoryMB)
-    }
-    
-    
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate{
@@ -246,13 +74,54 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate{
     }
 }
 
+extension ViewController: DiffusionManagerDelegate {
+    func diffusionDidModelDoweloading(progress: Double) {
+        self.vStatus.text = "下载模型中: (\(progress)"
+    }
+    
+    func diffusionDidModelUnCompressing() {
+        self.vStatus.text = "解压模型中..."
+    }
+    
+    func diffusionDidModelLoading() {
+        self.vStatus.text = "加载模型中..."
+    }
+    
+    func diffusionDidModelLoaded() {
+        self.vStatus.text = "模型加载: 完成"
+    }
+    
+    func diffusionDidModelFailure(error: DiffusionError) {
+        self.vStatus.text = "模型加载: 失败(\(error.localizedDescription))"
+    }
+    
+    func diffusionDidImagePreviewCreated(step: Int, images: [UIImage?]) {
+        self.vStatus.text = "图片生成中: \(step) / 20"
+    }
+    
+    func diffusionDidImageGenerated(results: [GenerationResult]) {
+        self.vStatus.text = "图片生成: 成功"
+        self.results = results
+        self.vTable.reloadData()
+    }
+    
+    func diffusionDidImageGenerateFailure(error: DiffusionError) {
+        self.vStatus.text = "图片生成: 失败(\(error.localizedDescription))"
+    }
+    
+    func diffusionDiDInfoUpdate(time: Int, total: Int, available: Int, used: Int) {
+        self.vMemory.text = "时间=\(time)\n总共=\(total)\n可用=\(available)\nAPP占用=\(used)\n"
+
+    }
+}
+
 extension ViewController: GenerationContextDelegate {
     func generationDidUdpateProgress(progress: StableDiffusionProgress) {
-        DispatchQueue.main.async {
+        /*DispatchQueue.main.async {
             self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
             if let cgImage = progress.image {
                 self.vImage.image = UIImage(cgImage: cgImage)
             }
-        }
+        }*/
     }
 }

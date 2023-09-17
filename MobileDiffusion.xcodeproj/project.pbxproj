@@ -11,6 +11,7 @@
 		18353FFB2AB345920027938C /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18353FF92AB345920027938C /* ImageCell.swift */; };
 		18353FFC2AB345920027938C /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18353FFA2AB345920027938C /* ImageCell.xib */; };
 		18353FFF2AB3EE540027938C /* StableDiffusion in Frameworks */ = {isa = PBXBuildFile; productRef = 18353FFE2AB3EE540027938C /* StableDiffusion */; };
+		187ABFE62AB4077B00C34518 /* DiffusionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187ABFE52AB4077B00C34518 /* DiffusionManager.swift */; };
 		187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57362AA5E18B00C41ABF /* AppDelegate.swift */; };
 		187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57382AA5E18B00C41ABF /* SceneDelegate.swift */; };
 		187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E573A2AA5E18B00C41ABF /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 		187E57592AA60B2800C41ABF /* Pipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57522AA60B2800C41ABF /* Pipeline.swift */; };
 		187E575A2AA60B2800C41ABF /* PipelineLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E57532AA60B2800C41ABF /* PipelineLoader.swift */; };
 		187E57602AA6146D00C41ABF /* DifussionImage+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187E575F2AA6146D00C41ABF /* DifussionImage+iOS.swift */; };
+		18BA87AC2AB6B45C0066D204 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BA87AB2AB6B45C0066D204 /* Extension.swift */; };
 		B081F0882172531F4D67164A /* Pods_MobileDiffusion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B504F210BF4F28A88973A22 /* Pods_MobileDiffusion.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +34,7 @@
 		0C9DFBE3A1E39CA5F3B632D3 /* Pods-MobileDiffusion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileDiffusion.debug.xcconfig"; path = "Target Support Files/Pods-MobileDiffusion/Pods-MobileDiffusion.debug.xcconfig"; sourceTree = "<group>"; };
 		18353FF92AB345920027938C /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		18353FFA2AB345920027938C /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		187ABFE52AB4077B00C34518 /* DiffusionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffusionManager.swift; sourceTree = "<group>"; };
 		187E57332AA5E18B00C41ABF /* MobileDiffusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileDiffusion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187E57362AA5E18B00C41ABF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		187E57382AA5E18B00C41ABF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +52,7 @@
 		187E57532AA60B2800C41ABF /* PipelineLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipelineLoader.swift; sourceTree = "<group>"; };
 		187E575E2AA60DDD00C41ABF /* MobileDiffusion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MobileDiffusion.entitlements; sourceTree = "<group>"; };
 		187E575F2AA6146D00C41ABF /* DifussionImage+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DifussionImage+iOS.swift"; sourceTree = "<group>"; };
+		18BA87AB2AB6B45C0066D204 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		2B504F210BF4F28A88973A22 /* Pods_MobileDiffusion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileDiffusion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9EE5B0D515CA75DD759F172 /* Pods-MobileDiffusion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileDiffusion.release.xcconfig"; path = "Target Support Files/Pods-MobileDiffusion/Pods-MobileDiffusion.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +120,7 @@
 			children = (
 				187E574B2AA5E1D300C41ABF /* Diffusion */,
 				187E575F2AA6146D00C41ABF /* DifussionImage+iOS.swift */,
+				18BA87AB2AB6B45C0066D204 /* Extension.swift */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 				187E57512AA60B2800C41ABF /* Pipeline */,
 				187E574C2AA60B2700C41ABF /* State.swift */,
 				187E57502AA60B2800C41ABF /* Utils.swift */,
+				187ABFE52AB4077B00C34518 /* DiffusionManager.swift */,
 			);
 			path = Diffusion;
 			sourceTree = "<group>";
@@ -287,10 +293,12 @@
 				187E57552AA60B2800C41ABF /* ModelInfo.swift in Sources */,
 				187E573B2AA5E18B00C41ABF /* ViewController.swift in Sources */,
 				187E57562AA60B2800C41ABF /* Downloader.swift in Sources */,
+				187ABFE62AB4077B00C34518 /* DiffusionManager.swift in Sources */,
 				187E575A2AA60B2800C41ABF /* PipelineLoader.swift in Sources */,
 				187E57372AA5E18B00C41ABF /* AppDelegate.swift in Sources */,
 				187E57392AA5E18B00C41ABF /* SceneDelegate.swift in Sources */,
 				187E57542AA60B2800C41ABF /* State.swift in Sources */,
+				18BA87AC2AB6B45C0066D204 /* Extension.swift in Sources */,
 				187E57602AA6146D00C41ABF /* DifussionImage+iOS.swift in Sources */,
 				187E57572AA60B2800C41ABF /* DiffusionImage.swift in Sources */,
 				18353FFB2AB345920027938C /* ImageCell.swift in Sources */,
