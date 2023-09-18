@@ -17,7 +17,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var vMemory: UILabel!
     @IBOutlet weak var vAction: UIButton!
     @IBOutlet weak var vTable: UITableView!
-    
+    var config = DiffusionImageConfigure()
+
     var manager: DiffusionManager!
     var results: [GenerationResult] = []
     
@@ -26,6 +27,13 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.manager = DiffusionManager(delegate: self)
         self.manager.setup()
+        self.vAction.isEnabled = false
+        
+        config.steps = 20
+        config.numOfImages = 1
+        config.positivePrompt = "Dog"
+        config.negativePrompt = ""
+        
         vTable.registerNibCell(ofType: ImageCell.self)
         vTable.reloadData()
     }
@@ -36,11 +44,6 @@ class ViewController: UIViewController {
             self.vAction.setTitle("生成", for: .normal)
             manager.cancelCreateImageFromText()
         } else {
-            var config = DiffusionImageConfigure()
-            config.steps = 25
-            config.numOfImages = 2
-            config.positivePrompt = "Dog"
-            config.negativePrompt = ""
             let err = manager.createImageFromText(configure: config)
             if err != nil {
                 print(err!.message ?? "Unknown error")
@@ -88,6 +91,7 @@ extension ViewController: DiffusionManagerDelegate {
     }
     
     func diffusionDidModelLoaded() {
+        self.vAction.isEnabled = true
         self.vStatus.text = "模型加载: 完成"
     }
     
@@ -96,7 +100,7 @@ extension ViewController: DiffusionManagerDelegate {
     }
     
     func diffusionDidImagePreviewCreated(step: Int, images: [UIImage?]) {
-        self.vStatus.text = "图片生成中: \(step) / 20"
+        self.vStatus.text = "图片生成中: \(step) / \(config.steps)"
     }
     
     func diffusionDidImageGenerated(results: [GenerationResult]) {

@@ -70,6 +70,7 @@ class GenerationContext: ObservableObject {
     @Published var previews = 2.0
     @Published var disableSafety = false
     @Published var previewImage: CGImage? = nil
+    @Published var imageCount: Int = 0
 
     @Published var computeUnits: ComputeUnits = Settings.shared.userSelectedComputeUnits ?? ModelInfo.defaultComputeUnits
 
@@ -102,6 +103,7 @@ class GenerationContext: ObservableObject {
             numPreviews: Int(previews),
             guidanceScale: Float(guidanceScale),
             disableSafety: disableSafety,
+            imageCount: imageCount,
             progress: { p in
                 self.delegate?.generationDidUdpateProgress(progress: p)
             }

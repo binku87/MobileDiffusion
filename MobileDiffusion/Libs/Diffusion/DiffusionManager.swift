@@ -7,7 +7,7 @@
 
 import UIKit
 import Combine
-
+import StableDiffusion
 
 class DiffusionError: Codable, Error {
     public var message: String?
@@ -30,6 +30,7 @@ struct DiffusionImageConfigure {
     var negativePrompt: String = ""
     var disableSafety: Bool = false
     var previewsCount: Int = 1
+    var schedulerType: StableDiffusionScheduler = .dpmSolverMultistepScheduler
 }
 
 protocol DiffusionManagerDelegate {
@@ -52,6 +53,7 @@ class DiffusionManager: NSObject {
     var imageTask: Task<Void, Never>? = nil
     var results: [GenerationResult] = []
     var timestamp: Int = 0
+    var previewCount: Int = 0
 
     init(delegate: DiffusionManagerDelegate) {
         self.delegate = delegate
@@ -111,6 +113,14 @@ class DiffusionManager: NSObject {
             generation.state = .running(nil)
             do {
                 self.timestamp = 0
+                generation.positivePrompt = configure.positivePrompt
+                generation.negativePrompt = configure.negativePrompt
+                generation.imageCount = configure.numOfImages
+                generation.guidanceScale = configure.guidanceScale
+                generation.disableSafety = configure.disableSafety
+                generation.steps = configure.steps
+                generation.seed = configure.seed
+                self.previewCount = configure.previewsCount
                 let results = try await generation.generate()
                 generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
                 DispatchQueue.main.async {

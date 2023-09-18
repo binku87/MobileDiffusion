@@ -18,11 +18,21 @@ public struct StableDiffusionProgress {
     var stepCount: Int { progress.stepCount }
 
     var currentImages: [CGImage?]
-
+    var previewCount: Int = 0
+    
     init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
         self.progress = progress
         self.currentImages = []
 
+        stepCount
+        if previewCount > 0 {
+            
+            if [0].contains(progress.step) {
+                self.currentImages = progress.currentImages
+            }
+        } else {
+            self.currentImages = []
+        }
         /*if [0, 8, 15].contains(progress.step) {
             self.currentImages = progress.currentImages
         } else {
@@ -80,6 +90,7 @@ class Pipeline {
         numPreviews previewCount: Int = 5,
         guidanceScale: Float = 7.5,
         disableSafety: Bool = false,
+        imageCount: Int = 1,
         progress: @escaping (StableDiffusionProgress) -> Void
     ) throws -> [GenerationResult] {
         let beginDate = Date()
@@ -91,12 +102,12 @@ class Pipeline {
         var config = StableDiffusionPipeline.Configuration(prompt: prompt)
         config.negativePrompt = negativePrompt
         config.stepCount = stepCount
-        config.seed = 3720662312 //theSeed
+        config.seed = theSeed
         config.guidanceScale = guidanceScale
         config.disableSafety = disableSafety
         config.schedulerType = .dpmSolverMultistepScheduler
         config.useDenoisedIntermediates = true
-        config.imageCount = 1
+        config.imageCount = imageCount
         if isXL {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025
