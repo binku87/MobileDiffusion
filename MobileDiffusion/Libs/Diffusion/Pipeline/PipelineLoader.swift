@@ -165,7 +165,7 @@ extension PipelineLoader {
                                                        configuration: configuration,
                                                        reduceMemory: true)
             } else {
-                throw "Stable Diffusion XL requires macOS 14"
+                throw "Stable Diffusion XL requires iOS 17.0"
             }
         } else {
             pipeline = try StableDiffusionPipeline(resourcesAt: url,

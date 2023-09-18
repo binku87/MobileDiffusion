@@ -35,8 +35,14 @@ class ViewController: UIViewController {
     var manager: DiffusionManager!
     var results: [GenerationResult] = []
     var currentModel: ModelInfo!
-    var model1 = ModelInfo(name: "disney-pixal-cartoon", url: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip", isXL: false)
-    var model2 = ModelInfo(name: "disney-pixal-cartoon-1", url: "http://192.168.0.29:8000/disney-pixal-cartoon.zip", isXL: false)
+    var model1 = ModelInfo(
+        name: "disney-pixal-cartoon",
+        url: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip",
+        isXL: false)
+    var model2 = ModelInfo(
+        name: "disney-pixal-cartoon-1",
+        url: "http://192.168.0.29:8000/disney-pixal-cartoon.zip",
+        isXL: false)
     
     override func viewDidLoad() {
         super.viewDidLoad()
