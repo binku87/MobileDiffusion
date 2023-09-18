@@ -9,34 +9,63 @@ import UIKit
 import Combine
 import Darwin
 import Foundation
+import StableDiffusion
 
 class ViewController: UIViewController {
     @IBOutlet weak var vStatus: UILabel!
-    @IBOutlet weak var vImage: UIImageView!
     @IBOutlet weak var vPrompt: UITextField!
     @IBOutlet weak var vMemory: UILabel!
     @IBOutlet weak var vAction: UIButton!
     @IBOutlet weak var vTable: UITableView!
+    @IBOutlet weak var vModelName: UILabel!
+    @IBOutlet weak var vStep: UILabel!
+    @IBOutlet weak var vImageCount: UILabel!
+    @IBOutlet weak var vPreviewCount: UILabel!
+    @IBOutlet weak var vImageCountStepper: UIStepper!
+    @IBOutlet weak var vPreviewCountStepper: UIStepper!
+    @IBOutlet weak var vStepStepper: UIStepper!
+    @IBOutlet weak var vScheduler: UISegmentedControl!
+    
     var config = DiffusionImageConfigure()
+    var imageCount: Int = 1
+    var previewCount: Int = 0
+    var steps: Int = 10
+    var scheduler: StableDiffusionScheduler = .dpmSolverMultistepScheduler
 
     var manager: DiffusionManager!
     var results: [GenerationResult] = []
+    var currentModel: ModelInfo!
+    var model1 = ModelInfo(name: "disney-pixal-cartoon", url: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip", isXL: false)
+    var model2 = ModelInfo(name: "disney-pixal-cartoon-1", url: "http://192.168.0.29:8000/disney-pixal-cartoon.zip", isXL: false)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        NotificationCenter.default.reinstall(observer: self, name: .AppWillTerminate, selector: #selector(self.willTerminate))
         self.manager = DiffusionManager(delegate: self)
-        self.manager.setup()
+        currentModel = model1
+        vModelName.text = currentModel.name
+        self.manager.setup(model: currentModel)
         self.vAction.isEnabled = false
         
-        config.steps = 10
-        config.numOfImages = 2
-        config.positivePrompt = "Dog"
-        config.negativePrompt = ""
-        config.previewsCount = 3
-        
+        vImageCount.text = "图片个数: \(imageCount)"
+        vImageCountStepper.value = Double(imageCount)
+        vPreviewCount.text = "预览个数: \(previewCount)"
+        vPreviewCountStepper.value = Double(previewCount)
+        vStep.text = "生成步数: \(steps)"
+        vStepStepper.value = Double(steps)
         vTable.registerNibCell(ofType: ImageCell.self)
         vTable.reloadData()
+    }
+    
+    @IBAction func switchModel() {
+        if currentModel.name == model1.name {
+            currentModel = model2
+        } else {
+            currentModel = model1
+        }
+        vModelName.text = currentModel.name
+        self.manager.loadModel(currentModel)
     }
 
     @IBAction func tapGenerate() {
@@ -45,13 +74,50 @@ class ViewController: UIViewController {
             self.vAction.setTitle("生成", for: .normal)
             manager.cancelCreateImageFromText()
         } else {
-            let err = manager.createImageFromText(configure: config)
+            let err = manager.createImageFromText(configure: currentConfig)
             if err != nil {
                 print(err!.message ?? "Unknown error")
             } else {
                 self.vAction.setTitle("取消", for: .normal)
             }
         }
+    }
+    
+    @objc func willTerminate() {
+        self.manager.willTerminate()
+    }
+    
+    @IBAction func changeImageCount() {
+        imageCount = Int(vImageCountStepper.value)
+        vImageCount.text = "图片个数: \(imageCount)"
+    }
+    
+    @IBAction func changePreviewCount() {
+        previewCount = Int(vPreviewCountStepper.value)
+        vPreviewCount.text = "预览个数: \(previewCount)"
+    }
+    
+    @IBAction func changeStepCount() {
+        steps = Int(vStepStepper.value)
+        vStep.text = "生成步数: \(steps)"
+    }
+    
+    @IBAction func changeScheduler() {
+        if vScheduler.selectedSegmentIndex == 0 {
+            scheduler = .dpmSolverMultistepScheduler
+        } else {
+            scheduler = .pndmScheduler
+        }
+    }
+    
+    var currentConfig: DiffusionImageConfigure {
+        config.steps = steps
+        config.numOfImages = imageCount
+        config.positivePrompt = vPrompt.text ?? "Dog"
+        config.negativePrompt = ""
+        config.previewsCount = previewCount
+        config.schedulerType = scheduler
+        return config
     }
 }
 
@@ -100,12 +166,12 @@ extension ViewController: DiffusionManagerDelegate {
         self.vStatus.text = "模型加载: 失败(\(error.localizedDescription))"
     }
     
-    func diffusionDidImagePreviewCreated(step: Int, images: [UIImage?]) {
+    func diffusionDidImagePreviewCreated(step: Int, images: [CGImage?]) {
         self.vStatus.text = "图片生成中: \(step) / \(config.steps)"
         if images.count > 0 {
             var results: [GenerationResult] = []
             images.forEach { image in
-                results.append(GenerationResult(image: image?.cgImage, lastSeed: 0, userCanceled: false))
+                results.append(GenerationResult(image: image, lastSeed: 0, userCanceled: false))
             }
             self.results = results
             self.vTable.reloadData()
@@ -116,6 +182,7 @@ extension ViewController: DiffusionManagerDelegate {
         self.vStatus.text = "图片生成: 成功"
         self.results = results
         self.vTable.reloadData()
+        self.vAction.setTitle("生成", for: .normal)
     }
     
     func diffusionDidImageGenerateFailure(error: DiffusionError) {

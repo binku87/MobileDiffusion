@@ -11,7 +11,6 @@ import SwiftUI
 import CoreML
 import StableDiffusion
 
-let DEFAULT_MODEL = ModelInfo.v2Base
 let DEFAULT_PROMPT = "Labrador in the style of Vermeer"
 
 enum GenerationState {
@@ -72,7 +71,7 @@ class GenerationContext: ObservableObject {
     @Published var previewImage: CGImage? = nil
     @Published var imageCount: Int = 0
 
-    @Published var computeUnits: ComputeUnits = Settings.shared.userSelectedComputeUnits ?? ModelInfo.defaultComputeUnits
+    @Published var computeUnits: ComputeUnits = .cpuAndNeuralEngine
 
     private var progressSubscriber: Cancellable?
 
@@ -132,20 +131,9 @@ class Settings {
     
     private init() {
         defaults.register(defaults: [
-            Keys.model.rawValue: ModelInfo.v2Base.modelId,
             Keys.safetyCheckerDisclaimer.rawValue: false,
             Keys.computeUnits.rawValue: -1      // Use default
         ])
-    }
-    
-    var currentModel: ModelInfo {
-        set {
-            defaults.set(newValue.modelId, forKey: Keys.model.rawValue)
-        }
-        get {
-            guard let modelId = defaults.string(forKey: Keys.model.rawValue) else { return DEFAULT_MODEL }
-            return ModelInfo.from(modelId: modelId) ?? DEFAULT_MODEL
-        }
     }
     
     var safetyCheckerDisclaimerShown: Bool {

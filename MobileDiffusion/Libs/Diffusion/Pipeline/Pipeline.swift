@@ -18,33 +18,58 @@ public struct StableDiffusionProgress {
     var stepCount: Int { progress.stepCount }
 
     var currentImages: [CGImage?]
-    var previewCount: Int = 0
     
-    init(progress: StableDiffusionPipeline.Progress, previewIndices: [Bool]) {
+    init(progress: StableDiffusionPipeline.Progress, previewCount: Int) {
         self.progress = progress
         self.currentImages = []
 
-        stepCount
+        /*
+         0: []
+         1: [0]
+         2: [0, 5]
+         3: [0, 3, 6]
+         4: [0, 2, 4, 6]
+         5: [0, 2, 4, 6, 8]
+         6: [0, 1, 2, 3, 4, 5]
+         7: [0, 1, 2, 3, 4, 5, 6]
+         8: [0, 1, 2, 3, 4, 5, 6, 7]
+         9: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+         10: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+         11: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+         12: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        */
+        let stepCount = progress.stepCount
+        var needPreviewSteps: [Int] = []
         if previewCount > 0 {
-            
-            if [0].contains(progress.step) {
-                self.currentImages = progress.currentImages
+            if previewCount > stepCount {
+                needPreviewSteps = (0...stepCount).compactMap({ $0 })
+            } else {
+                let space = stepCount / (previewCount == 0 ? stepCount : previewCount)
+                var current = 0
+                while true {
+                    needPreviewSteps.append(current)
+                    current += space
+                    if current > stepCount {
+                        break
+                    }
+                    if needPreviewSteps.count >= previewCount {
+                        needPreviewSteps.append(stepCount)
+                        break
+                    }
+                    if current + space > stepCount {
+                        current = stepCount
+                    }
+                }
             }
         } else {
-            self.currentImages = []
+            needPreviewSteps = [stepCount]
         }
-        /*if [0, 8, 15].contains(progress.step) {
+        needPreviewSteps.removeLast()
+        if needPreviewSteps.contains(progress.step) {
             self.currentImages = progress.currentImages
         } else {
             self.currentImages = []
-        }*/
-
-        // Since currentImages is a computed property, only access the preview image if necessary
-        //if progress.step < previewIndices.count, previewIndices[progress.step] {
-        //if [0, 8, 15, 19, 20].contains(progress.step) {
-            //self.currentImages = progress.currentImages
-        //}
-        //}
+        }
     }
 }
 
@@ -112,18 +137,13 @@ class Pipeline {
             config.encoderScaleFactor = 0.13025
             config.decoderScaleFactor = 0.13025
         }
-
-        // Evenly distribute previews based on inference steps
-        let previewIndices = previewIndices(stepCount, previewCount)
-
+        
         let images = try pipeline.generateImages(configuration: config) { p in
             sampleTimer.stop()
-            let newProgress = StableDiffusionProgress(progress: p, previewIndices: previewIndices)
+            let newProgress = StableDiffusionProgress(progress: p, previewCount: previewCount)
             handleProgress(newProgress, sampleTimer: sampleTimer)
             progress(newProgress)
             if p.stepCount != p.step {
-                //Thread.sleep(forTimeInterval: 3.0)
-                print("Start...")
                 sampleTimer.start()
             }
             return !canceled

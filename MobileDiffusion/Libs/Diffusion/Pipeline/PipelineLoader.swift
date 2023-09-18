@@ -22,7 +22,7 @@ class PipelineLoader {
 
     init(model: ModelInfo, computeUnits: ComputeUnits? = nil, maxSeed: UInt32 = UInt32.max) {
         self.model = model
-        self.computeUnits = computeUnits ?? model.defaultComputeUnits
+        self.computeUnits = .cpuAndNeuralEngine
         self.maxSeed = maxSeed
         state = .undetermined
         setInitialState()
@@ -79,10 +79,7 @@ extension PipelineLoader {
 
 extension PipelineLoader {
     var url: URL {
-        return URL(string: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip")!
-        //return model.modelURL(for: variant)
-        //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-1-4_split_einsum_compiled.zip")!
-        //return URL(string: "https://general-api.oss-cn-hangzhou.aliyuncs.com/website/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip")!
+        return URL(string: self.model.url)!
     }
     
     var filename: String {
@@ -103,17 +100,6 @@ extension PipelineLoader {
     
     var ready: Bool {
         return FileManager.default.fileExists(atPath: compiledURL.path)
-    }
-    
-    var variant: AttentionVariant {
-        switch computeUnits {
-        case .cpuOnly           : return .original          // Not supported yet
-        case .cpuAndGPU         : return .original
-        case .cpuAndNeuralEngine: return model.supportsAttentionV2 ? .splitEinsumV2 : .splitEinsum
-        case .all               : return .splitEinsum
-        @unknown default:
-            fatalError("Unknown MLComputeUnits")
-        }
     }
     
     func prepare() async throws -> Pipeline {
@@ -177,7 +163,7 @@ extension PipelineLoader {
             if #available(macOS 14.0, iOS 17.0, *) {
                 pipeline = try StableDiffusionXLPipeline(resourcesAt: url,
                                                        configuration: configuration,
-                                                       reduceMemory: model.reduceMemory)
+                                                       reduceMemory: true)
             } else {
                 throw "Stable Diffusion XL requires macOS 14"
             }
@@ -186,7 +172,7 @@ extension PipelineLoader {
                                                        controlNet: [],
                                                        configuration: configuration,
                                                        disableSafety: true,
-                                                       reduceMemory: model.reduceMemory)
+                                                       reduceMemory: true)
         }
         try pipeline.loadResources()
         print("Pipeline loaded in \(Date().timeIntervalSince(beginDate))")

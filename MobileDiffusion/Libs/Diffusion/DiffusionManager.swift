@@ -39,7 +39,7 @@ protocol DiffusionManagerDelegate {
     func diffusionDidModelLoading()
     func diffusionDidModelLoaded()
     func diffusionDidModelFailure(error: DiffusionError)
-    func diffusionDidImagePreviewCreated(step: Int, images: [UIImage?])
+    func diffusionDidImagePreviewCreated(step: Int, images: [CGImage?])
     func diffusionDidImageGenerated(results: [GenerationResult])
     func diffusionDidImageGenerateFailure(error: DiffusionError)
     func diffusionDiDInfoUpdate(time: Int, total: Int, available: Int, used: Int)
@@ -49,23 +49,24 @@ class DiffusionManager: NSObject {
     var delegate: DiffusionManagerDelegate
     var stateSubscriber: Cancellable?
     var generation = GenerationContext()
-    let model = ModelInfo.v21Base
     var imageTask: Task<Void, Never>? = nil
     var results: [GenerationResult] = []
     var timestamp: Int = 0
-    var previewCount: Int = 0
 
     init(delegate: DiffusionManagerDelegate) {
         self.delegate = delegate
     }
     
-    
-    public func setup() {
-        loadModel()
+    public func setup(model: ModelInfo) {
+        loadModel(model, skipUnload: true)
         startMemeryInfo()
     }
     
-    public func loadModel() {
+    public func loadModel(_ model: ModelInfo, skipUnload: Bool = false) {
+        self.timestamp = 0
+        if !skipUnload {
+            generation.pipeline?.setCancelled()
+        }
         Task.init {
             let loader = PipelineLoader(model: model)
             stateSubscriber = loader.statePublisher.sink { state in
@@ -120,7 +121,7 @@ class DiffusionManager: NSObject {
                 generation.disableSafety = configure.disableSafety
                 generation.steps = configure.steps
                 generation.seed = configure.seed
-                self.previewCount = configure.previewsCount
+                generation.previews = Double(configure.previewsCount)
                 let results = try await generation.generate()
                 generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
                 DispatchQueue.main.async {
@@ -137,7 +138,11 @@ class DiffusionManager: NSObject {
     }
     
     public func cancelCreateImageFromText() {
-        
+        self.generation.cancelGeneration()
+    }
+    
+    public func willTerminate() {
+        self.generation.pipeline?.setCancelled()
     }
     
     private func startMemeryInfo() {
@@ -207,64 +212,9 @@ class DiffusionManager: NSObject {
 }
 
 extension DiffusionManager: GenerationContextDelegate {
-    /*
-     0: []
-     1: [0]
-     2: [0, 5]
-     3: [0, 3, 6]
-     4: [0, 2, 4, 6]
-     5: [0, 2, 4, 6, 8]
-     6: [0, 1, 2, 3, 4, 5]
-     7: [0, 1, 2, 3, 4, 5, 6]
-     8: [0, 1, 2, 3, 4, 5, 6, 7]
-     9: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-     10: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-     11: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-     12: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-     */
     func generationDidUdpateProgress(progress: StableDiffusionProgress) {
         DispatchQueue.main.async {
-            var images: [UIImage?] = []
-            let stepCount = progress.stepCount
-            let previewCount = self.previewCount
-            var needPreviewSteps: [Int] = []
-            if previewCount > 0 {
-                if previewCount > stepCount {
-                    needPreviewSteps = (0...stepCount).compactMap({ $0 })
-                } else {
-                    let space = stepCount / previewCount
-                    var current = 0
-                    while true {
-                        needPreviewSteps.append(current)
-                        current += space
-                        if current > stepCount {
-                            break
-                        }
-                        if needPreviewSteps.count >= previewCount {
-                            needPreviewSteps.append(stepCount)
-                            break
-                        }
-                        if current + space > stepCount {
-                            current = stepCount
-                        }
-                    }
-                }
-            } else {
-                needPreviewSteps = [stepCount]
-            }
-            needPreviewSteps.removeLast()
-            if needPreviewSteps.contains(progress.step) {
-                progress.progress.currentImages.forEach { cgImage in
-                    var image: UIImage?
-                    if let cgImage = cgImage {
-                        image = UIImage(cgImage: cgImage)
-                    }
-                    images.append(image)
-                }
-            }
-            DispatchQueue.main.async {
-                self.delegate.diffusionDidImagePreviewCreated(step: progress.step, images: images)
-            }
+            self.delegate.diffusionDidImagePreviewCreated(step: progress.step, images: progress.currentImages)
         }
     }
 }
