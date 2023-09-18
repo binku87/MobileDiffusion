@@ -21,11 +21,19 @@ class DiffusionError: Codable, Error {
     }
 }
 
+enum DiffusionImageBatchMode: Int {
+    // 一张一张生成
+    case loop
+    // 同时生成
+    case batch
+}
+
 struct DiffusionImageConfigure {
     var steps: Int = 20
     var seed: UInt32 = 0
     var guidanceScale: Double = 7.5
     var numOfImages = 1
+    var batchMode: DiffusionImageBatchMode = .batch
     var positivePrompt: String = "Dog"
     var negativePrompt: String = ""
     var disableSafety: Bool = false
@@ -110,27 +118,38 @@ class DiffusionManager: NSObject {
             return DiffusionError(message: "diffusion.image_creating")
         }
   
+        let loopCount = configure.batchMode == .batch ? 0 : (configure.numOfImages - 1)
         imageTask = Task {
-            generation.state = .running(nil)
-            do {
-                self.timestamp = 0
-                generation.positivePrompt = configure.positivePrompt
-                generation.negativePrompt = configure.negativePrompt
-                generation.imageCount = configure.numOfImages
-                generation.guidanceScale = configure.guidanceScale
-                generation.disableSafety = configure.disableSafety
-                generation.steps = configure.steps
-                generation.seed = configure.seed
-                generation.previews = Double(configure.previewsCount)
-                let results = try await generation.generate()
-                generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
-                DispatchQueue.main.async {
+            var results: [GenerationResult] = []
+            for _ in (0...loopCount) {
+                generation.state = .running(nil)
+                do {
+                    self.timestamp = 0
+                    generation.positivePrompt = configure.positivePrompt
+                    generation.negativePrompt = configure.negativePrompt
+                    if configure.batchMode == .batch {
+                        generation.imageCount = configure.numOfImages
+                    } else {
+                        generation.imageCount = 1
+                    }
+                    generation.guidanceScale = configure.guidanceScale
+                    generation.disableSafety = configure.disableSafety
+                    generation.steps = configure.steps
+                    generation.seed = configure.seed
+                    generation.previews = Double(configure.previewsCount)
+                    let r = try await generation.generate()
+                    if configure.batchMode == .loop {
+                        results.append(contentsOf: r)
+                    } else {
+                        results = r
+                    }
+                    generation.state = .complete(generation.positivePrompt, results[0].image, results[0].lastSeed, results[0].interval)
                     self.delegate.diffusionDidImageGenerated(results: results)
-                }
-            } catch {
-                generation.state = .failed(error)
-                DispatchQueue.main.async {
-                    self.delegate.diffusionDidImageGenerateFailure(error: DiffusionError(message: error.localizedDescription))
+                } catch {
+                    generation.state = .failed(error)
+                    DispatchQueue.main.async {
+                        self.delegate.diffusionDidImageGenerateFailure(error: DiffusionError(message: error.localizedDescription))
+                    }
                 }
             }
         }

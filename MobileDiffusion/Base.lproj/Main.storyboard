@@ -37,7 +37,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="7vY-kY-fAa">
-                                <rect key="frame" x="10" y="358" width="373" height="419.66666666666674"/>
+                                <rect key="frame" x="10" y="401.66666666666674" width="373" height="416.33333333333326"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="vMc-sm-Pd9"/>
@@ -45,7 +45,7 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJe-7V-Py1">
-                                <rect key="frame" x="10" y="787.66666666666663" width="41.333333333333336" height="20.333333333333371"/>
+                                <rect key="frame" x="234" y="195.66666666666666" width="41.333333333333314" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -66,12 +66,15 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="图片个数: 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0pJ-4N-0Jj">
                                 <rect key="frame" x="10" y="201" width="110" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="110" id="eUM-c6-BQd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="0eN-Pk-U3J">
-                                <rect key="frame" x="150" y="195.66666666666666" width="94" height="32"/>
+                                <rect key="frame" x="120" y="195.66666666666666" width="94" height="32"/>
                                 <connections>
                                     <action selector="changeImageCount" destination="BYZ-38-t0r" eventType="valueChanged" id="MEH-dt-wl4"/>
                                 </connections>
@@ -83,19 +86,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="AOk-bi-LEc">
-                                <rect key="frame" x="150" y="236.66666666666666" width="94" height="31.999999999999972"/>
+                                <rect key="frame" x="120" y="236.66666666666666" width="94" height="31.999999999999972"/>
                                 <connections>
                                     <action selector="changePreviewCount" destination="BYZ-38-t0r" eventType="valueChanged" id="3J0-dJ-tsw"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="生成步数: 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoZ-em-4fp">
-                                <rect key="frame" x="10" y="283" width="86" height="21"/>
+                                <rect key="frame" x="10" y="283" width="110" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="M2R-6q-NlK">
-                                <rect key="frame" x="150" y="277.66666666666669" width="94" height="32"/>
+                                <rect key="frame" x="120" y="277.66666666666669" width="94" height="32"/>
                                 <connections>
                                     <action selector="changeStepCount" destination="BYZ-38-t0r" eventType="valueChanged" id="D8D-oT-3lI"/>
                                 </connections>
@@ -116,17 +119,34 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="图片批量模式" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VKd-dt-6AS">
+                                <rect key="frame" x="10" y="365.66666666666669" width="104" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="184-eo-kNQ">
+                                <rect key="frame" x="124" y="360.66666666666669" width="259" height="32"/>
+                                <segments>
+                                    <segment title="一张一张"/>
+                                    <segment title="同时"/>
+                                </segments>
+                                <connections>
+                                    <action selector="changeBatchMode" destination="BYZ-38-t0r" eventType="valueChanged" id="aYY-t1-mYa"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="pJe-7V-Py1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="2GN-2D-H6i"/>
+                            <constraint firstItem="184-eo-kNQ" firstAttribute="leading" secondItem="VKd-dt-6AS" secondAttribute="trailing" constant="10" id="5Da-H4-Mbm"/>
                             <constraint firstItem="9ps-Yh-Pj5" firstAttribute="top" secondItem="M2R-6q-NlK" secondAttribute="bottom" constant="10" id="6FW-Sf-581"/>
                             <constraint firstItem="M2R-6q-NlK" firstAttribute="centerY" secondItem="NoZ-em-4fp" secondAttribute="centerY" id="6LW-rp-efa"/>
                             <constraint firstItem="hxh-o3-z6V" firstAttribute="leading" secondItem="9Ue-XS-uzM" secondAttribute="trailing" constant="10" id="7M4-45-1mX"/>
                             <constraint firstItem="J3c-6N-Ugw" firstAttribute="top" secondItem="kpJ-aX-lil" secondAttribute="bottom" constant="10" id="7f5-VQ-xIp"/>
                             <constraint firstItem="22Y-et-2Rb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9Mj-Pd-MNj"/>
                             <constraint firstItem="NoZ-em-4fp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="9eA-Ts-4uN"/>
+                            <constraint firstItem="VKd-dt-6AS" firstAttribute="top" secondItem="mLK-FC-KOx" secondAttribute="bottom" constant="20" id="Bo6-Zg-rIP"/>
                             <constraint firstItem="kpJ-aX-lil" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="D6q-Ik-6s0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="J3c-6N-Ugw" secondAttribute="trailing" constant="10" id="Fo9-AR-hjf"/>
                             <constraint firstItem="9Ue-XS-uzM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="I4q-tl-LLN"/>
@@ -136,20 +156,25 @@
                             <constraint firstItem="NoZ-em-4fp" firstAttribute="top" secondItem="mSU-bS-zVJ" secondAttribute="bottom" constant="20" id="LRK-Ll-bu1"/>
                             <constraint firstItem="7vY-kY-fAa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="QyK-v1-VPa"/>
                             <constraint firstItem="hxh-o3-z6V" firstAttribute="centerY" secondItem="J3c-6N-Ugw" secondAttribute="centerY" id="RMB-g2-Jey"/>
-                            <constraint firstItem="0eN-Pk-U3J" firstAttribute="leading" secondItem="0pJ-4N-0Jj" secondAttribute="trailing" constant="30" id="RQd-ER-EdV"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pJe-7V-Py1" secondAttribute="bottom" constant="10" id="TF3-G4-vLk"/>
+                            <constraint firstItem="0eN-Pk-U3J" firstAttribute="leading" secondItem="0pJ-4N-0Jj" secondAttribute="trailing" id="RQd-ER-EdV"/>
+                            <constraint firstItem="184-eo-kNQ" firstAttribute="top" secondItem="9ps-Yh-Pj5" secondAttribute="bottom" constant="10" id="Slu-cQ-MvA"/>
                             <constraint firstItem="mSU-bS-zVJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="YNF-AM-mEc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="184-eo-kNQ" secondAttribute="trailing" constant="10" id="ZFM-kD-3hm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9ps-Yh-Pj5" secondAttribute="trailing" constant="10" id="bRi-5W-eWY"/>
-                            <constraint firstItem="pJe-7V-Py1" firstAttribute="top" secondItem="7vY-kY-fAa" secondAttribute="bottom" constant="10" id="dwd-jf-AqK"/>
-                            <constraint firstItem="M2R-6q-NlK" firstAttribute="leading" secondItem="NoZ-em-4fp" secondAttribute="trailing" constant="54" id="fPk-3u-SRI"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7vY-kY-fAa" secondAttribute="bottom" id="cql-0g-Tgi"/>
+                            <constraint firstItem="M2R-6q-NlK" firstAttribute="leading" secondItem="NoZ-em-4fp" secondAttribute="trailing" id="fPk-3u-SRI"/>
                             <constraint firstItem="0pJ-4N-0Jj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="gJX-JX-Scp"/>
+                            <constraint firstItem="VKd-dt-6AS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="gjO-LO-s9r"/>
                             <constraint firstItem="mLK-FC-KOx" firstAttribute="centerY" secondItem="9ps-Yh-Pj5" secondAttribute="centerY" id="hZk-2U-oaj"/>
+                            <constraint firstItem="184-eo-kNQ" firstAttribute="centerY" secondItem="VKd-dt-6AS" secondAttribute="centerY" id="iC2-IH-O60"/>
                             <constraint firstItem="22Y-et-2Rb" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="ifP-sr-LiO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kpJ-aX-lil" secondAttribute="trailing" constant="10" id="k5y-Am-d4V"/>
+                            <constraint firstItem="pJe-7V-Py1" firstAttribute="top" secondItem="0eN-Pk-U3J" secondAttribute="top" id="k6l-86-nWv"/>
+                            <constraint firstItem="pJe-7V-Py1" firstAttribute="leading" secondItem="0eN-Pk-U3J" secondAttribute="trailing" constant="20" id="m3I-mZ-rfE"/>
                             <constraint firstItem="AOk-bi-LEc" firstAttribute="leading" secondItem="0eN-Pk-U3J" secondAttribute="leading" id="nvd-Wr-OEG"/>
                             <constraint firstItem="AOk-bi-LEc" firstAttribute="centerY" secondItem="mSU-bS-zVJ" secondAttribute="centerY" id="oNY-6g-xz4"/>
-                            <constraint firstItem="7vY-kY-fAa" firstAttribute="top" secondItem="J3c-6N-Ugw" secondAttribute="bottom" constant="170" id="prG-Zv-LxZ"/>
                             <constraint firstItem="kpJ-aX-lil" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="rda-3Z-5UL"/>
+                            <constraint firstItem="7vY-kY-fAa" firstAttribute="top" secondItem="184-eo-kNQ" secondAttribute="bottom" constant="10" id="tOb-JB-D7s"/>
                             <constraint firstItem="0eN-Pk-U3J" firstAttribute="centerY" secondItem="0pJ-4N-0Jj" secondAttribute="centerY" id="tch-45-GQQ"/>
                             <constraint firstItem="M2R-6q-NlK" firstAttribute="leading" secondItem="AOk-bi-LEc" secondAttribute="leading" id="ulM-9w-Ztv"/>
                             <constraint firstItem="9Ue-XS-uzM" firstAttribute="centerY" secondItem="J3c-6N-Ugw" secondAttribute="centerY" id="vIy-2W-Qqj"/>
@@ -159,6 +184,7 @@
                     </view>
                     <connections>
                         <outlet property="vAction" destination="J3c-6N-Ugw" id="Ohh-kC-DWl"/>
+                        <outlet property="vBatchMode" destination="184-eo-kNQ" id="7fa-s1-M3W"/>
                         <outlet property="vImageCount" destination="0pJ-4N-0Jj" id="8pO-vk-VIj"/>
                         <outlet property="vImageCountStepper" destination="0eN-Pk-U3J" id="9KV-Ic-itu"/>
                         <outlet property="vMemory" destination="pJe-7V-Py1" id="TZo-DX-6gC"/>

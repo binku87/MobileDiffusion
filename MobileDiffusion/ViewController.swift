@@ -25,22 +25,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var vPreviewCountStepper: UIStepper!
     @IBOutlet weak var vStepStepper: UIStepper!
     @IBOutlet weak var vScheduler: UISegmentedControl!
-    
+    @IBOutlet weak var vBatchMode: UISegmentedControl!
+
     var config = DiffusionImageConfigure()
     var imageCount: Int = 1
     var previewCount: Int = 0
     var steps: Int = 10
     var scheduler: StableDiffusionScheduler = .dpmSolverMultistepScheduler
+    var batchMode: DiffusionImageBatchMode = .loop
 
     var manager: DiffusionManager!
     var results: [GenerationResult] = []
     var currentModel: ModelInfo!
     var model1 = ModelInfo(
-        name: "disney-pixal-cartoon",
+        name: "stable-diffusion-2.1",
         url: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip",
         isXL: false)
     var model2 = ModelInfo(
-        name: "disney-pixal-cartoon-1",
+        name: "disney-pixal-cartoon",
         url: "http://192.168.0.29:8000/disney-pixal-cartoon.zip",
         isXL: false)
     
@@ -116,6 +118,14 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func changeBatchMode() {
+        if vBatchMode.selectedSegmentIndex == 0 {
+            batchMode = .loop
+        } else {
+            batchMode = .batch
+        }
+    }
+    
     var currentConfig: DiffusionImageConfigure {
         config.steps = steps
         config.numOfImages = imageCount
@@ -123,6 +133,7 @@ class ViewController: UIViewController {
         config.negativePrompt = ""
         config.previewsCount = previewCount
         config.schedulerType = scheduler
+        config.batchMode = batchMode
         return config
     }
 }
@@ -152,7 +163,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate{
 
 extension ViewController: DiffusionManagerDelegate {
     func diffusionDidModelDoweloading(progress: Double) {
-        self.vStatus.text = "下载模型中: (\(progress)"
+        self.vStatus.text = "下载模型中: (\(String(format: "%.2f", progress)))"
     }
     
     func diffusionDidModelUnCompressing() {
@@ -185,10 +196,12 @@ extension ViewController: DiffusionManagerDelegate {
     }
     
     func diffusionDidImageGenerated(results: [GenerationResult]) {
-        self.vStatus.text = "图片生成: 成功"
-        self.results = results
-        self.vTable.reloadData()
-        self.vAction.setTitle("生成", for: .normal)
+        DispatchQueue.main.async {
+            self.vStatus.text = "图片生成: 成功"
+            self.results = results
+            self.vTable.reloadData()
+            self.vAction.setTitle("生成", for: .normal)
+        }
     }
     
     func diffusionDidImageGenerateFailure(error: DiffusionError) {
