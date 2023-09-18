@@ -29,10 +29,11 @@ class ViewController: UIViewController {
         self.manager.setup()
         self.vAction.isEnabled = false
         
-        config.steps = 20
-        config.numOfImages = 1
+        config.steps = 10
+        config.numOfImages = 2
         config.positivePrompt = "Dog"
         config.negativePrompt = ""
+        config.previewsCount = 3
         
         vTable.registerNibCell(ofType: ImageCell.self)
         vTable.reloadData()
@@ -101,6 +102,14 @@ extension ViewController: DiffusionManagerDelegate {
     
     func diffusionDidImagePreviewCreated(step: Int, images: [UIImage?]) {
         self.vStatus.text = "图片生成中: \(step) / \(config.steps)"
+        if images.count > 0 {
+            var results: [GenerationResult] = []
+            images.forEach { image in
+                results.append(GenerationResult(image: image?.cgImage, lastSeed: 0, userCanceled: false))
+            }
+            self.results = results
+            self.vTable.reloadData()
+        }
     }
     
     func diffusionDidImageGenerated(results: [GenerationResult]) {
@@ -115,17 +124,5 @@ extension ViewController: DiffusionManagerDelegate {
     
     func diffusionDiDInfoUpdate(time: Int, total: Int, available: Int, used: Int) {
         self.vMemory.text = "时间=\(time)\n总共=\(total)\n可用=\(available)\nAPP占用=\(used)\n"
-
-    }
-}
-
-extension ViewController: GenerationContextDelegate {
-    func generationDidUdpateProgress(progress: StableDiffusionProgress) {
-        /*DispatchQueue.main.async {
-            self.vStatus.text = "Image: \(progress.step) / \(progress.stepCount)"
-            if let cgImage = progress.image {
-                self.vImage.image = UIImage(cgImage: cgImage)
-            }
-        }*/
     }
 }
