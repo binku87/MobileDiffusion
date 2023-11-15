@@ -39,6 +39,7 @@ class ViewController: UIViewController {
     var currentModel: ModelInfo!
     var model1 = ModelInfo(
         name: "stable-diffusion-2.1",
+        //url: "https://huggingface.co/pcuenq/coreml-stable-diffusion-2-1-base/resolve/coreml-stable-diffusion-2-1-base_original_compiled.zip"
         url: "http://192.168.0.29:8000/coreml-stable-diffusion-2-1-base_split_einsum_compiled.zip",
         isXL: false)
     var model2 = ModelInfo(
